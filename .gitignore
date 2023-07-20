@@ -1,0 +1,5 @@
+#files to ignore: basically all folders ignored and then include just the .C and .h files
+
+/*
+!/*.C
+!/*.h
