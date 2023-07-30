@@ -120,7 +120,7 @@ void JetPlottingMergedFileFractions(int Rvalue = 0)
 
         /////////////
 
-        hDetHCALE[iE]->Scale(1/hDetHCALE[iE]->GetEntries());
+        hDetHCALE[iE]->Scale(1/hDetHCALE[iE]->GetEntries()); //or change these rather to integral...
         hDetECALE[iE]->Scale(1/hDetECALE[iE]->GetEntries());
         hPartNeutralE[iE]->Scale(1/hPartNeutralE[iE]->GetEntries());
         hPartChargedE[iE]->Scale(1/hPartChargedE[iE]->GetEntries());

@@ -62,7 +62,7 @@ void focalJetResolutionsETest(
           histDeltaPt_bins[0][i][p]->Scale(1./histDeltaPt_bins[0][i][p]->Integral()); 
         }
       } else {
-        histResponseMat_pT[0][i]  = (TH2D*)fileR02->Get(Form("hRespMatrix_pT_Eta_%i",i-1));
+CHANGE TO E??        histResponseMat_pT[0][i]  = (TH2D*)fileR02->Get(Form("hRespMatrix_pT_Eta_%i",i-1));
         histMean_pT[0][i]         = (TH1D*)fileR02->Get(Form("hEtaMeanpT_%i",i-1));
         histMedian_pT[0][i]       = (TH1D*)fileR02->Get(Form("hEtaMedianpT_%i",i-1));
         histSigma_pT[0][i]        = (TH1D*)fileR02->Get(Form("hEtaSDpT_%i",i-1));

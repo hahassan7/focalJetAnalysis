@@ -26,7 +26,7 @@ void JetPlottingMergedEta(int NormValue=0,int Rvalue=0)
     const Int_t nR = 3; //5
     const Float_t Rvals[nR] = {0.2, 0.4, 0.6};//{0.2, 0.3, 0.4, 0.5, 0.6}; // Cone radii
     //int Rvalue = 0; // choose the index of the jet R you want to draw the main histos for !
-    int constMin = 1; //min number 2 of constituents in matchd jet
+    int constMin = 0; //min number 2 of constituents in matchd jet
 
     TFile *fout;
     if(NormValue==0)fout = new TFile(Form("JetJetOutput/FINALAN/oneETA20230417_0-5GeV_Merged_OutputR%d.root", int(Rvals[Rvalue] * 10)), "RECREATE");

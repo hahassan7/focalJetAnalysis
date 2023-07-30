@@ -8,8 +8,8 @@ void ChangeTitleOfCanvas(TCanvas* cCanvas, TString sTitle);
 
 const int SettingLogY = 1;
 
-//Draws detector level jet pT E and const spectra
-void ChatGPT() {
+//Draws particle level jet pT E and const spectra
+void chatGPTPartLevelTruth() {
 
     gStyle->SetOptStat(0);
     gStyle->SetOptTitle(0);
@@ -23,9 +23,9 @@ void ChatGPT() {
     const double limitYpTmin    = 0.000000001;
     const double limitYEmin     = 0.0000001;
     const double XpTmin     = 10; //change to 10 unless lowest bin, then 5
-    const double XpTmax     = 120;
-    const double XEmin     = 100; 
-    const double XEmax     = 1500;
+    const double XpTmax     = 200;
+    const double XEmin     = 10; 
+    const double XEmax     = 2000;
     //->GetYaxis()->SetRangeUser
 
     // Arrays to hold histograms for different types and R values
@@ -51,15 +51,15 @@ void ChatGPT() {
     Size_t  markerS[5]    = { 2, 2, 2.4, 2, 2};
 
     // Read histograms from the ROOT file
-    TFile* file = TFile::Open("JetJetOutput/July2023/data/ptmin10/Merged.root", "READ");
-    //TFile* file = TFile::Open("JetJetOutput/July2023/data/20230722_pythia8_JetJet_5-10GeV_Merged_Output.root", "READ");
-    //TFile* file = TFile::Open("JetJetOutput/July2023/data/20230722_pythia8_JetJet_10-20GeV_Merged_Output.root", "READ");
-    //TFile* file = TFile::Open("JetJetOutput/July2023/data/20230722_pythia8_JetJet_20-30GeV_Merged_Output.root", "READ");
-    //TFile* file = TFile::Open("JetJetOutput/July2023/data/20230722_pythia8_JetJet_30-40GeV_Merged_Output.root", "READ");
-    //TFile* file = TFile::Open("JetJetOutput/July2023/data/20230722_pythia8_JetJet_40-60GeV_Merged_Output.root", "READ");
-    //TFile* file = TFile::Open("JetJetOutput/July2023/data/20230722_pythia8_JetJet_60-100GeV_Merged_Output.root", "READ");
-    //TFile* file = TFile::Open("JetJetOutput/July2023/data/20230722_pythia8_JetJet_100-200GeV_Merged_Output.root", "READ");
-    //TFile* file = TFile::Open("JetJetOutput/July2023/data/20230722_pythia8_JetJet_200-GeV_Merged_Output.root", "READ");
+    TFile* file = TFile::Open("JetJetOutput/July2023/data/ptmin10/truth_Merged.root", "READ");
+    //TFile* file = TFile::Open("JetJetOutput/July2023/data/truth_20230722_pythia8_JetJet_5-10GeV_Merged_Output.root", "READ");
+    //TFile* file = TFile::Open("JetJetOutput/July2023/data/truth_20230722_pythia8_JetJet_10-20GeV_Merged_Output.root", "READ");
+    //TFile* file = TFile::Open("JetJetOutput/July2023/data/truth_20230722_pythia8_JetJet_20-30GeV_Merged_Output.root", "READ");
+    //TFile* file = TFile::Open("JetJetOutput/July2023/data/truth_20230722_pythia8_JetJet_30-40GeV_Merged_Output.root", "READ");
+    //TFile* file = TFile::Open("JetJetOutput/July2023/data/truth_20230722_pythia8_JetJet_40-60GeV_Merged_Output.root", "READ");
+    //TFile* file = TFile::Open("JetJetOutput/July2023/data/truth_20230722_pythia8_JetJet_60-100GeV_Merged_Output.root", "READ");
+    //TFile* file = TFile::Open("JetJetOutput/July2023/data/truth_20230722_pythia8_JetJet_100-200GeV_Merged_Output.root", "READ");
+    //TFile* file = TFile::Open("JetJetOutput/July2023/data/truth_20230722_pythia8_JetJet_200-GeV_Merged_Output.root", "READ");
 
 
     const Int_t nR = 3; 
@@ -68,7 +68,7 @@ void ChatGPT() {
     //const double EtaBinBorders[nEtaBins] = {3.4,5.0,5.5}; //
     //const double EtaMin[2] = {3.4,3.9}; 
     //const double EtaMax[2] = {5.0,5.5};
-    TString etaRange[nEtaBins-1]     = {"3.4+R< #eta_{jet} < 4.5","4.5 < #eta_{jet} < 5.5-R"}; //consider making this different range for R=0.6, 0.4, 0.2. ...
+    TString etaRange[nEtaBins-1]     =  {"3.4+R< #eta_{jet} < 4.5","4.5 < #eta_{jet} < 5.5-R"}; //consider making this different range for R=0.6, 0.4, 0.2. ...
     const Int_t nConst = 5;
     const Int_t ConstVals[nConst] = {1, 2, 3, 5, 10}; // constituent values to check
 
@@ -126,14 +126,14 @@ void ChatGPT() {
                 hist_pTvscon_R_e[R][e][c] = (TH1F*)(file->Get(Form("hist_pTvscon_R%d_e%d_c%d", R, e, c))->Clone());
                 hist_pTvscon_R_e[R][e][c]->SetLineColor(colors[c]);
                 NormalizeToProb(hist_pTvscon_R_e[R][e][c]);
-                hist_pTvscon_R_e[R][e][c]->SetTitle(Form("Constituent N = %d pT Distribution for detector jets, R = %0.1f, %s; pT [GeV/c]; Probability", ConstVals[c], Rvals[R], etaRange[e].Data()));
+                hist_pTvscon_R_e[R][e][c]->SetTitle(Form("Constituent N = %d pT Distribution for particle jets, R = %0.1f, %s; pT [GeV/c]; Probability", ConstVals[c], Rvals[R], etaRange[e].Data()));
                 hist_pTvscon_R_e[R][e][c]->GetYaxis()->SetRangeUser(limitYpTmin,limitYpT);
                 hist_pTvscon_R_e[R][e][c]->GetXaxis()->SetRangeUser(XpTmin,XpTmax);
 
                 hist_Evscon_R_e[R][e][c] = (TH1F*)(file->Get(Form("hist_Evscon_R%d_e%d_c%d", R, e, c))->Clone());
                 hist_Evscon_R_e[R][e][c]->SetLineColor(colors[c]);
                 NormalizeToProb(hist_Evscon_R_e[R][e][c]);
-                hist_Evscon_R_e[R][e][c]->SetTitle(Form("Constituent N = %d E Distribution for detector jets, R = %0.1f, %s; E [GeV]; Probability", ConstVals[c], Rvals[R], etaRange[e].Data()));
+                hist_Evscon_R_e[R][e][c]->SetTitle(Form("Constituent N = %d E Distribution for particle jets, R = %0.1f, %s; E [GeV]; Probability", ConstVals[c], Rvals[R], etaRange[e].Data()));
                 hist_Evscon_R_e[R][e][c]->GetYaxis()->SetRangeUser(limitYEmin,limitYE);
                 hist_Evscon_R_e[R][e][c]->GetXaxis()->SetRangeUser(XEmin,XEmax);
 
@@ -143,14 +143,14 @@ void ChatGPT() {
             hist_pTvscon_R[R][c] = (TH1F*)(file->Get(Form("hist_pTvscon_R%d_c%d", R, c))->Clone());
             hist_pTvscon_R[R][c]->SetLineColor(colors[c]);
             NormalizeToProb(hist_pTvscon_R[R][c]);
-            hist_pTvscon_R[R][c]->SetTitle(Form("Constituent N = %d pT Distribution for detector jets, R = %0.1f; pT [GeV/c]; Probability", ConstVals[c], Rvals[R]));
-            hist_pTvscon_R[R][c]->GetYaxis()->SetRangeUser(limitYpTmin,limitYpT);
+            hist_pTvscon_R[R][c]->SetTitle(Form("Constituent N = %d pT Distribution for particle jets, R = %0.1f; pT [GeV/c]; Probability", ConstVals[c], Rvals[R]));
+            hist_pTvscon_R[R][c]->GetYaxis()->SetRangeUser(XpTmin,limitYpT);
 
             hist_Evscon_R[R][c] = (TH1F*)(file->Get(Form("hist_Evscon_R%d_c%d", R, c))->Clone());
             hist_Evscon_R[R][c]->SetLineColor(colors[c]);
             NormalizeToProb(hist_Evscon_R[R][c]);
-            hist_Evscon_R[R][c]->SetTitle(Form("Constituent N = %d E Distribution for detector jets, R = %0.1f; E [GeV]; Probability", ConstVals[c], Rvals[R]));
-            hist_Evscon_R[R][c]->GetYaxis()->SetRangeUser(limitYEmin,limitYE);
+            hist_Evscon_R[R][c]->SetTitle(Form("Constituent N = %d E Distribution for particle jets, R = %0.1f; E [GeV]; Probability", ConstVals[c], Rvals[R]));
+            hist_Evscon_R[R][c]->GetYaxis()->SetRangeUser(XpTmin,limitYpT);
 
         }
 
@@ -175,8 +175,8 @@ void ChatGPT() {
 
     }
     legend_pT_R->Draw(); // Add legend to the canvas
-    ChangeTitleOfCanvas(canvas_pT_R, "Detector level jet pT");
-    canvas_pT_R->SaveAs("figs/July2023/ptmin10/spectra/det/canvas_pT_R.png");
+    ChangeTitleOfCanvas(canvas_pT_R, "particle level jet pT");
+    canvas_pT_R->SaveAs("figs/July2023/ptmin10/spectra/truth/TruthpartLevelcanvas_pT_R.png");
 
     // Draw histograms for hist_E_R[3]
     TCanvas* canvas_E_R = new TCanvas("canvas_E_R", "Histogram Canvas (E_R)", 900, 600);
@@ -194,8 +194,8 @@ void ChatGPT() {
     }
 
     legend_E_R->Draw(); // Add legend to the canvas
-    ChangeTitleOfCanvas(canvas_E_R, "Detector level jet E");
-    canvas_E_R->SaveAs("figs/July2023/ptmin10/spectra/det/canvas_E_R.png");
+    ChangeTitleOfCanvas(canvas_E_R, "particle level jet E");
+    canvas_E_R->SaveAs("figs/July2023/ptmin10/spectra/truth/TruthpartLevelcanvas_E_R.png");
 
     // Draw histograms for hist_con_R[3]
     TCanvas* canvas_con_R = new TCanvas("canvas_con_R", "Histogram Canvas (con_R)", 900, 600);
@@ -213,8 +213,8 @@ void ChatGPT() {
     }
 
     legend_con_R->Draw(); // Add legend to the canvas
-    ChangeTitleOfCanvas(canvas_con_R, "Detector level jet constituent N");
-    canvas_con_R->SaveAs("figs/July2023/ptmin10/spectra/det/canvas_con_R.png");
+    ChangeTitleOfCanvas(canvas_con_R, "particle level jet constituent N");
+    canvas_con_R->SaveAs("figs/July2023/ptmin10/spectra/truth/TruthpartLevelcanvas_con_R.png");
 
     // Draw the hist_pT_R_e histograms for each R value in separate canvases and one plot each
     for (int R = 0; R < 3; ++R) {
@@ -233,8 +233,8 @@ void ChatGPT() {
         }
 
         legend_pT_R_e->Draw(); // Add legend to the canvas
-        ChangeTitleOfCanvas(canvas_pT_R_e, Form("Detector level jet pT, R = %0.1f", Rvals[R]));
-        canvas_pT_R_e->SaveAs(Form("figs/July2023/ptmin10/spectra/det/canvas_pT_R%d_e.png", R));
+        ChangeTitleOfCanvas(canvas_pT_R_e, Form("particle level jet pT, R = %0.1f", Rvals[R]));
+        canvas_pT_R_e->SaveAs(Form("figs/July2023/ptmin10/spectra/truth/TruthpartLevelcanvas_pT_R%d_e.png", R));
     }
 
     // Draw the hist_E_R_e histograms for each R value in separate canvases and one plot each
@@ -254,8 +254,8 @@ void ChatGPT() {
         }
 
         legend_E_R_e->Draw(); // Add legend to the canvas
-        ChangeTitleOfCanvas(canvas_E_R_e, Form("Detector level jet E, R = %0.1f", Rvals[R]));
-        canvas_E_R_e->SaveAs(Form("figs/July2023/ptmin10/spectra/det/canvas_E_R%d_e.png", R));
+        ChangeTitleOfCanvas(canvas_E_R_e, Form("particle level jet E, R = %0.1f", Rvals[R]));
+        canvas_E_R_e->SaveAs(Form("figs/July2023/ptmin10/spectra/truth/TruthpartLevelcanvas_E_R%d_e.png", R));
     }
 
     // Draw the hist_con_R_e histograms for each R value in separate canvases and one plot each
@@ -275,8 +275,8 @@ void ChatGPT() {
         }
 
         legend_con_R_e->Draw(); // Add legend to the canvas
-        ChangeTitleOfCanvas(canvas_con_R_e, Form("Detector level jet constituents, R = %0.1f", Rvals[R]));
-        canvas_con_R_e->SaveAs(Form("figs/July2023/ptmin10/spectra/det/canvas_con_R%d_e.png", R));
+        ChangeTitleOfCanvas(canvas_con_R_e, Form("particle level jet constituents, R = %0.1f", Rvals[R]));
+        canvas_con_R_e->SaveAs(Form("figs/July2023/ptmin10/spectra/truth/TruthpartLevelcanvas_con_R%d_e.png", R));
     }
 
     // Draw histograms for hist_pTvscon_R_e[3][2][5]
@@ -295,8 +295,8 @@ void ChatGPT() {
                 legend_pTvscon_R_e->AddEntry(hist_pTvscon_R_e[R][e][c], Form("Constituent N = %d", ConstVals[c]), "l");
             }
             legend_pTvscon_R_e->Draw(); // Add legend to the canvas
-            ChangeTitleOfCanvas(canvas_pTvscon_R_e, Form("Detector level jet pT, R = %0.1f, %s", Rvals[R], etaRange[e].Data()));
-            canvas_pTvscon_R_e->SaveAs(Form("figs/July2023/ptmin10/spectra/det/canvas_pTvscon_R%d_e%d.png", R, e));
+            ChangeTitleOfCanvas(canvas_pTvscon_R_e, Form("particle level jet pT, R = %0.1f, %s", Rvals[R], etaRange[e].Data()));
+            canvas_pTvscon_R_e->SaveAs(Form("figs/July2023/ptmin10/spectra/truth/TruthpartLevelcanvas_pTvscon_R%d_e%d.png", R, e));
         }
     }
 
@@ -316,8 +316,8 @@ void ChatGPT() {
                 legend_Evscon_R_e->AddEntry(hist_Evscon_R_e[R][e][c], Form("Constituent N = %d", ConstVals[c]), "l");
             }
             legend_Evscon_R_e->Draw(); // Add legend to the canvas
-            ChangeTitleOfCanvas(canvas_Evscon_R_e, Form("Detector level jet E, R = %0.1f, %s", Rvals[R], etaRange[e].Data()));
-            canvas_Evscon_R_e->SaveAs(Form("figs/July2023/ptmin10/spectra/det/canvas_Evscon_R%d_e%d.png", R, e));
+            ChangeTitleOfCanvas(canvas_Evscon_R_e, Form("particle level jet E, R = %0.1f, %s", Rvals[R], etaRange[e].Data()));
+            canvas_Evscon_R_e->SaveAs(Form("figs/July2023/ptmin10/spectra/truth/TruthpartLevelcanvas_Evscon_R%d_e%d.png", R, e));
         }
     }
 
@@ -338,8 +338,8 @@ void ChatGPT() {
         }
 
         legend_pTvscon_R->Draw(); // Add legend to the canvas
-        ChangeTitleOfCanvas(canvas_pTvscon_R, Form("Detector level jet pT, R = %0.1f", Rvals[R]));
-        canvas_pTvscon_R->SaveAs(Form("figs/July2023/ptmin10/spectra/det/canvas_pTvscon_R%d.png", R));
+        ChangeTitleOfCanvas(canvas_pTvscon_R, Form("particle level jet pT, R = %0.1f", Rvals[R]));
+        canvas_pTvscon_R->SaveAs(Form("figs/July2023/ptmin10/spectra/truth/TruthpartLevelcanvas_pTvscon_R%d.png", R));
     }
 
     // Draw histograms for hist_Evscon_R[3][5]
@@ -359,8 +359,8 @@ void ChatGPT() {
         }
 
         legend_Evscon_R->Draw(); // Add legend to the canvas
-        ChangeTitleOfCanvas(canvas_Evscon_R, Form("Detector level jet E, R = %0.1f", Rvals[R]));
-        canvas_Evscon_R->SaveAs(Form("figs/July2023/ptmin10/spectra/det/canvas_Evscon_R%d.png", R));
+        ChangeTitleOfCanvas(canvas_Evscon_R, Form("particle level jet E, R = %0.1f", Rvals[R]));
+        canvas_Evscon_R->SaveAs(Form("figs/July2023/ptmin10/spectra/truth/TruthpartLevelcanvas_Evscon_R%d.png", R));
     }
 
 
