@@ -14,7 +14,7 @@ Double_t textSize = 0.03;//5;
 
 
 //Draws particle level jet pT E and const spectra
-void ChatGPTBoth() {
+void SpectraBoth() {
 
     gStyle->SetOptStat(0);
     gStyle->SetOptTitle(0);

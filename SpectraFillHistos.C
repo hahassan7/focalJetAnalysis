@@ -4,7 +4,7 @@
 #include <TTree.h>
 
 //Fills detector level jet pT E and const spectra
-void chatGPTFillHistos(Int_t NormValue = 0) { //detector level jets
+void SpectraFillHistos(Int_t NormValue = 0) { //detector level jets
 
     const int nNorm = 8; //8 bins but we skip the first 5-10 for now
     const Float_t normalizations[nNorm] = {0.0611191, 0.00717001, 0.000558759, 0.000107936, 4.32163e-05, 9.57109e-06, 1.24606e-06, 6.01382e-08};//{0.0610658,0.00716477,0.000557627,0.000107816,4.31694e-05,9.62255e-06,1.24904e-06,5.99517e-08};

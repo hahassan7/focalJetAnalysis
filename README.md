@@ -39,13 +39,12 @@ Lots of focal jet analysis macros.
 
     
 ### Macros for plotting jet spectra:
-  - The naming is weird but describes the writing process, will be changing it soon
-  - **ChatGPTFillHistos.C** fills the histos for detector level jet pT E and const spectra
-  - **ChatGPT.C** plots them
-  - **chatGPTFillHistosPartLevel.C** fills histos for matched particle level jets
-  - **chatGPTPartLevel.C** plots them
-  - **chatGPTFillHistosPartLevelTruth.C** fills histos for all truth level particle jets
-  - **chatGPTPartLevelTruth.C** plots them
+  - **SpectraFillHistos.C** fills the histos for detector level jet pT E and const spectra
+  - **Spectra.C** plots them
+  - **SpectraFillHistosPartLevel.C** fills histos for matched particle level jets
+  - **SpectraPartLevel.C** plots them
+  - **SpectraFillHistosPartLevelTruth.C** fills histos for all truth level particle jets
+  - **SpectraPartLevelTruth.C** plots them
   - **drawPDG.C** plots the spectra of particle PDG codes and eta-y for all particles in the jets
 
 ### Old versions of macros, ignore these:
