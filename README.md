@@ -7,7 +7,8 @@ Lots of focal jet analysis macros.
   - The output of the macros is merged manually with hadd to a file named Merged.root within each pThard bin folder
 
 ## The rest of the macros are run locally to fill and plot histograms from the jet output
-  - In folder jetOutput/ one finds example data sets with which the plotting macros can be tested. 
+  - In folder jetOutput/ one finds example data sets with which the plotting macros can be tested.
+      - These are currently the jet analysis outputs from CSC merged into files where there is now 500k events in each file. No normalization has yet been done.
 
  ### Macros for plotting response matrices, JES, JER:
   - **JetPlottingMerged.C** runs the histogram filling, pT and E response matrix and , also two different eta bins.
