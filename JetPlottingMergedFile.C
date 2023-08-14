@@ -10,15 +10,10 @@ double GetMedian( TH1D * h);
 
 void JetPlottingMergedFile(int Rvalue = 0)
 {   
-    //const int nNorm = 5;
-    //const Float_t normalizations[nNorm] = {2.21064, 0.0669805, 0.00182628, 0.000139462, 0.0000225822};
-    //int NormValue = 1;
-
     const Int_t nR = 3; //5
-    const Float_t Rvals[nR] = {0.2, 0.4, 0.6};//{0.2, 0.3, 0.4, 0.5, 0.6}; // Cone radii
-    //int Rvalue = 0; // choose the index of the jet R you want to draw the main histos for !
+    const Float_t Rvals[nR] = {0.2, 0.4, 0.6}; // Cone radii
 
-    TFile *jetFile = TFile::Open(Form("JetJetOutput/FINALAN/MergedR%d.root", int(Rvals[Rvalue] * 10)));
+    TFile *jetFile = TFile::Open(Form("Data20230728/JES/MergedR%d.root", int(Rvals[Rvalue] * 10)));
 
     TTree *jetTree = (TTree *)jetFile->Get("jetTree");
     TTree *TruthjetTree = (TTree *)jetFile->Get("truthjetTree");
@@ -28,50 +23,58 @@ void JetPlottingMergedFile(int Rvalue = 0)
     const int gcolors[nCol]={1,2,6,4,7,1,2,4,6,7};
     const int gmarkers[nCol]={4,8,25,21,8,21,25,4,8,21};
 
-
     const Float_t etaMin = 3.4; const Float_t etaMax = 5.5; 
 
-    const Int_t nPtBins = 15;
-    const Int_t nEBins  = 16;
-    //const double JetPtBorders[nPtBins] = {2.0, 5.0, 10.0, 15.0, 20.0, 25.0, 30.0, 35.0, 40.0, 70.0};
-    //const double JetPtBorders[nPtBins] = {2.0, 10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 80.0, 100.0, 400.0}; //setting new bins for largest pt binned pythia data
-    const double JetPtBorders[nPtBins] = {2.0, 5.0, 10.0, 15.0, 20.0, 25.0, 30.0, 35.0, 40.0, 50.0, 60.0, 70.0, 80.0, 100.0, 400.0}; 
-    const double JetEBorders[nEBins] = {0.0, 50.0, 100.0, 200.0, 300.0, 400.0, 500.0, 600.0, 700.0, 800.0, 900.0, 1000.0, 1250.0, 1500.0, 1750.0, 2000.0}; 
-    double medianspT[nPtBins];
-    double meanspT[nPtBins];
-    double mediansE[nEBins];
-    double meansE[nEBins];
-    double SDpT[nPtBins];
-    double SDE[nEBins];
+    const Int_t nPtBins = 14; 
+    const Int_t nEBins  = 15;
+    //const double JetPtBorders[nPtBins] = {5.0, 10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 80.0, 100.0, 400.0}; // nPtBins = 10
+    const double JetPtBorders[nPtBins] = {5.0, 10.0, 15.0, 20.0, 25.0, 30.0, 35.0, 40.0, 50.0, 60.0, 70.0, 80.0, 100.0, 150.0}; //nPtBins = 14
+    const double JetEBorders[nEBins] = {100.0, 200.0, 300.0, 400.0, 500.0, 600.0, 700.0, 800.0, 900.0, 1000.0, 1250.0, 1500.0, 1750.0, 2000.0, 3000.0}; //const Int_t nEBins  = 15;
+    double medianspT[nPtBins-1];
+    double meanspT[nPtBins-1];
+    double SDpT[nPtBins-1];
+    double mediansE[nEBins-1];
+    double meansE[nEBins-1];
+    double SDE[nEBins-1];
+
+    double gausMeanspT[nPtBins-1];
+    double gausMeansE[nEBins-1];
+    double gausSDpT[nPtBins-1];
+    double gausSDE[nEBins-1];
     //eta binned
     const Int_t nEtaBins = 3;//11;
     const Float_t EtaBinBorders[nEtaBins] = {3.8, 4.5, 5.1};
 
-    double EtamedianspT[nEtaBins][nPtBins];
-    double EtameanspT[nEtaBins][nPtBins];
-    double EtamediansE[nEtaBins][nEBins];
-    double EtameansE[nEtaBins][nEBins];
-    double EtaSDpT[nEtaBins][nPtBins];
-    double EtaSDE[nEtaBins][nEBins];
+    double EtamedianspT[nEtaBins-1][nPtBins-1];
+    double EtameanspT[nEtaBins-1][nPtBins-1];
+    double EtaSDpT[nEtaBins-1][nPtBins-1];
 
-    TFile *fout = new TFile(Form("JetJetOutput/FINALAN/Merged20230417_0-1000GeV_OutputR%d.root", int(Rvals[Rvalue] * 10)), "RECREATE");
+    double EtamediansE[nEtaBins-1][nEBins-1];
+    double EtameansE[nEtaBins-1][nEBins-1];
+    double EtaSDE[nEtaBins-1][nEBins-1];
+
+    TFile *fout = new TFile(Form("Data20230728/JES/Merged_OutputR%d.root", int(Rvals[Rvalue] * 10)), "RECREATE");
+
     //histograms
 
-    TH2D *hRespMatrix_pT_Eta[nEtaBins];
-    TH2D *hRespMatrix_E_Eta[nEtaBins];
-    TH1D *hjetRatiopT_Eta[nEtaBins][nPtBins];
-    TH1D *hjetRatioE_Eta[nEtaBins][nEBins];
-    TH1D *hEtaMedianpT[nEtaBins], *hEtaMedianE[nEtaBins];
-    TH1D *hEtaMeanpT[nEtaBins], *hEtaMeanE[nEtaBins];
-    TH1D *hEtaSDpT[nEtaBins], *hEtaSDE[nEtaBins];
+    TH2D *hRespMatrix_pT_Eta[nEtaBins-1];
+    TH2D *hRespMatrix_E_Eta[nEtaBins-1];
+    TH1D *hjetRatiopT_Eta[nEtaBins-1][nPtBins-1];
+    TH1D *hjetRatioE_Eta[nEtaBins-1][nEBins-1];
+    TH1D *hEtaMedianpT[nEtaBins-1], *hEtaMedianE[nEtaBins-1];
+    TH1D *hEtaMeanpT[nEtaBins-1], *hEtaMeanE[nEtaBins-1];
+    TH1D *hEtaSDpT[nEtaBins-1], *hEtaSDE[nEtaBins-1];
 
+    //Not-eta-binned histograms
     TH1F *hjetpT[nR], *hjetE[nR];
     TH1F *hTruthjetpT[nR], *hTruthjetE[nR];
 
-    TH1D *hjetRatiopT[nPtBins], *hjetRatioE[nEBins];
+    TH1D *hjetRatiopT[nPtBins-1], *hjetRatioE[nEBins-1];
     TH1D *hMedianpT, *hMedianE;
     TH1D *hMeanpT, *hMeanE;
     TH1D *hSDpT, *hSDE;
+    TH1D *hgausMeanspT, *hgausMeansE;
+    TH1D *hgausSDpT, *hgausSDE;
 
     hMedianpT = new TH1D("hMedianpT", "Mean and median of #Deltap_{T} distribution",nPtBins-1, JetPtBorders);
     hMedianE = new TH1D("hMedianE", "Mean and median of #DeltaE distribution",nEBins-1, JetEBorders);
@@ -79,6 +82,12 @@ void JetPlottingMergedFile(int Rvalue = 0)
     hMeanE = new TH1D("hMeanE", "Mean and median of #DeltaE distribution",nEBins-1, JetEBorders); 
     hSDpT = new TH1D("hSDpT", "Standard deviation of #Deltap_{T} distribution",nPtBins-1, JetPtBorders);
     hSDE = new TH1D("hSDE", "Standard deviation of #DeltaE distribution",nEBins-1, JetEBorders);
+
+
+    hgausMeanspT = new TH1D("hgausMeanspT", "Mean and median of #Deltap_{T} distribution",nPtBins-1, JetPtBorders); 
+    hgausMeansE = new TH1D("hgausMeansE", "Mean and median of #DeltaE distribution",nEBins-1, JetEBorders); 
+    hgausSDpT = new TH1D("hgausSDpT", "Standard deviation of #Deltap_{T} distribution",nPtBins-1, JetPtBorders);
+    hgausSDE = new TH1D("hgausSDE", "Standard deviation of #DeltaE distribution",nEBins-1, JetEBorders);
 
     for (int iE = 0; iE < nEtaBins-1; ++iE)
     {
@@ -116,7 +125,7 @@ void JetPlottingMergedFile(int Rvalue = 0)
     for (int ipt = 0; ipt < nPtBins-1; ++ipt) 
     {
 
-        TF1 *f1 = new TF1("f1","gaus",-1,0.6);
+        //TF1 *f1 = new TF1("f1","gaus",-1,0.6);
         
         //hjetRatiopT[ipt] = new TH1D(Form("hjetRatiopT_%d", ipt), Form("Jet-by-jet #Deltap_{T} distribution, p_{T}: %d - %d GeV/c", int(JetPtBorders[ipt]), int(JetPtBorders[ipt+1])), 50, -1.0, 1.0);
         //hjetRatioE[ipt] = new TH1D(Form("hjetRatioE_%d", ipt), Form("Jet-by-jet #Delta E distribution, p_{T}: %d - %d GeV/c", int(JetPtBorders[ipt]), int(JetPtBorders[ipt+1])), 50, -1.0, 1.0);
@@ -131,6 +140,7 @@ void JetPlottingMergedFile(int Rvalue = 0)
         medianspT[ipt]=GetMedian(hjetRatiopT[ipt]);
         meanspT[ipt]=hjetRatiopT[ipt]->GetMean();
         SDpT[ipt]=hjetRatiopT[ipt]->GetStdDev();
+
         //medianspT[ipt]=f1->GetParameter(1);
         //meanspT[ipt]=f1->GetParameter(1);
         //SDpT[ipt]=f1->GetParameter(2);
@@ -145,12 +155,23 @@ void JetPlottingMergedFile(int Rvalue = 0)
 
 //SCALE?
         //hjetRatiopT[ipt]->Scale(1., "width");
-        //hjetRatiopT[ipt]->Scale(1./hjetRatiopT[ipt]->GetEntries(), "width");
-        hjetRatiopT[ipt]->Scale(1./hjetRatiopT[ipt]->GetEntries());
+        hjetRatiopT[ipt]->Scale(1./hjetRatiopT[ipt]->Integral(), "");
+        //hjetRatiopT[ipt]->Scale(1./hjetRatiopT[ipt]->GetEntries());
         cout << "In jet pT range " << JetPtBorders[ipt] << " - " << JetPtBorders[ipt+1] << "GeV/c, number of jets accepted = " << hjetRatiopT[ipt]->GetEntries() << endl;
 
+        hjetRatiopT[ipt]->Fit("gaus");
+        gausMeanspT[ipt] = hjetRatiopT[ipt]->GetFunction("gaus")->GetParameter(1);
+        gausSDpT[ipt] = hjetRatiopT[ipt]->GetFunction("gaus")->GetParameter(2);
+
+        hgausMeanspT->Fill(JetPtBorders[ipt+1]-((JetPtBorders[ipt+1]-JetPtBorders[ipt])/2.0),gausMeanspT[ipt]);
+        hgausMeanspT->SetBinError(ipt+1,hjetRatiopT[ipt]->GetFunction("gaus")->GetParError(1));
+        hgausSDpT->Fill(JetPtBorders[ipt+1]-((JetPtBorders[ipt+1]-JetPtBorders[ipt])/2.0),gausSDpT[ipt]);
+        hgausSDpT->SetBinError(ipt+1, hjetRatiopT[ipt]->GetFunction("gaus")->GetParError(2));
+
+
+
         hjetRatiopT[ipt]->GetXaxis()->SetTitle("(p_{T}^{det}-p_{T}^{part})/p_{T}^{part}");
-        hjetRatiopT[ipt]->GetYaxis()->SetTitle("probability/bin");
+        hjetRatiopT[ipt]->GetYaxis()->SetTitle("probability");
 
         //same for eta cut
         for (int iE = 0; iE < nEtaBins-1; ++iE)
@@ -176,12 +197,12 @@ void JetPlottingMergedFile(int Rvalue = 0)
             hEtaSDpT[iE]->SetBinError(ipt+1, hjetRatiopT_Eta[iE][ipt]->GetStdDevError());
 
 //            hjetRatiopT_Eta[iE][ipt]->Scale(1., "width");
-            //hjetRatiopT_Eta[iE][ipt]->Scale(1./hjetRatiopT_Eta[iE][ipt]->GetEntries(), "width");
-            hjetRatiopT_Eta[iE][ipt]->Scale(1./hjetRatiopT_Eta[iE][ipt]->GetEntries());
+            hjetRatiopT_Eta[iE][ipt]->Scale(1./hjetRatiopT_Eta[iE][ipt]->Integral(), "");
+            //hjetRatiopT_Eta[iE][ipt]->Scale(1./hjetRatiopT_Eta[iE][ipt]->GetEntries());
             //cout << "In jet pT range " << JetPtBorders[ipt] << " - " << JetPtBorders[ipt+1] << "GeV/c, number of jets accepted = " << hjetRatiopT_Eta[iE][ipt]->GetEntries() << endl;
 
             hjetRatiopT_Eta[iE][ipt]->GetXaxis()->SetTitle("(p_{T}^{det}-p_{T}^{part})/p_{T}^{part}");
-            hjetRatiopT_Eta[iE][ipt]->GetYaxis()->SetTitle("probability/bin");
+            hjetRatiopT_Eta[iE][ipt]->GetYaxis()->SetTitle("probability");
         }       
     }
 
@@ -189,7 +210,7 @@ void JetPlottingMergedFile(int Rvalue = 0)
     for (int ipt = 0; ipt < nEBins-1; ++ipt) 
     {
 
-        TF1 *f1 = new TF1("f1","gaus",-1,0.6);
+        //TF1 *f1 = new TF1("f1","gaus",-1,0.6);
         
         //Fill deltaE histos, no eta cut
         //jetTree->Draw(Form("(jetE-jetE_match)/jetE_match>>hjetRatioE_%d", ipt), Form("jetR==%d && jetpT_match>=%d  && jetpT_match<%d  && jetEta>3.4+%f && jetEta<5.5-%f && jetEta_match>3.4+%f && jetEta_match<5.5-%f && jet_distmatch<%f", int(Rvals[Rvalue] * 10), int(JetPtBorders[ipt]), int(JetPtBorders[ipt+1]),Rvals[Rvalue],Rvals[Rvalue],Rvals[Rvalue],Rvals[Rvalue], Rvals[Rvalue]*0.6), "goff"); 
@@ -197,13 +218,14 @@ void JetPlottingMergedFile(int Rvalue = 0)
 
         hjetRatioE[ipt] = (TH1D*)((TH1D*)jetFile->Get(Form("hjetRatioE_%d", ipt)))->Clone();
         //hjetRatioE[ipt]->Fit("f1");
-        
+
         mediansE[ipt]=GetMedian(hjetRatioE[ipt]);
         meansE[ipt]=hjetRatioE[ipt]->GetMean();
         SDE[ipt]=hjetRatioE[ipt]->GetStdDev();
         //mediansE[ipt]=f1->GetParameter(1);
         //meansE[ipt]=f1->GetParameter(1);
         //SDE[ipt]=f1->GetParameter(2);
+
 
         hMedianE->Fill(JetEBorders[ipt+1]-((JetEBorders[ipt+1]-JetEBorders[ipt])/2),mediansE[ipt]);
         hMedianE->SetBinError(ipt+1,hjetRatioE[ipt]->GetMeanError());
@@ -212,13 +234,23 @@ void JetPlottingMergedFile(int Rvalue = 0)
         hSDE->Fill(JetEBorders[ipt+1]-((JetEBorders[ipt+1]-JetEBorders[ipt])/2),SDE[ipt]);
         hSDE->SetBinError(ipt+1, hjetRatioE[ipt]->GetStdDevError());
 
+
 //SCALE?
         //hjetRatioE[ipt]->Scale(1., "width");
-        //hjetRatioE[ipt]->Scale(1/hjetRatioE[ipt]->GetEntries(), "width");
-        hjetRatioE[ipt]->Scale(1/hjetRatioE[ipt]->GetEntries());
+        hjetRatioE[ipt]->Scale(1/hjetRatioE[ipt]->Integral(), "");
+        //hjetRatioE[ipt]->Scale(1/hjetRatioE[ipt]->GetEntries());
+
+        hjetRatioE[ipt]->Fit("gaus");
+        gausMeansE[ipt] = hjetRatioE[ipt]->GetFunction("gaus")->GetParameter(1);
+        gausSDE[ipt] = hjetRatioE[ipt]->GetFunction("gaus")->GetParameter(2);
+        hgausMeansE->Fill(JetEBorders[ipt+1]-((JetEBorders[ipt+1]-JetEBorders[ipt])/2.0),gausMeansE[ipt]);
+        hgausMeansE->SetBinError(ipt+1,hjetRatioE[ipt]->GetFunction("gaus")->GetParError(1));
+        hgausSDE->Fill(JetEBorders[ipt+1]-((JetEBorders[ipt+1]-JetEBorders[ipt])/2.0),gausSDE[ipt]);
+        hgausSDE->SetBinError(ipt+1, hjetRatioE[ipt]->GetFunction("gaus")->GetParError(2));
+        
 
         hjetRatioE[ipt]->GetXaxis()->SetTitle("(E^{det}-E^{part})/E^{part}");
-        hjetRatioE[ipt]->GetYaxis()->SetTitle("probability/bin");
+        hjetRatioE[ipt]->GetYaxis()->SetTitle("probability");
 
         //same for eta cut
         for (int iE = 0; iE < nEtaBins-1; ++iE)
@@ -244,12 +276,12 @@ void JetPlottingMergedFile(int Rvalue = 0)
             hEtaSDE[iE]->SetBinError(ipt+1, hjetRatioE_Eta[iE][ipt]->GetStdDevError());
 
             //hjetRatioE_Eta[iE][ipt]->Scale(1., "width");
-            //hjetRatioE_Eta[iE][ipt]->Scale(1./hjetRatioE_Eta[iE][ipt]->GetEntries(), "width");
-            hjetRatioE_Eta[iE][ipt]->Scale(1./hjetRatioE_Eta[iE][ipt]->GetEntries());
+            hjetRatioE_Eta[iE][ipt]->Scale(1./hjetRatioE_Eta[iE][ipt]->Integral(), "");
+            //hjetRatioE_Eta[iE][ipt]->Scale(1./hjetRatioE_Eta[iE][ipt]->GetEntries());
             //cout << "In jet pT range " << JetEBorders[ipt] << " - " << JetEBorders[ipt+1] << "GeV/c, number of jets accepted = " << hjetRatioE_Eta[iE][ipt]->GetEntries() << endl;
 
             hjetRatioE_Eta[iE][ipt]->GetXaxis()->SetTitle("(E^{det}-E^{part})/E^{part}");
-            hjetRatioE_Eta[iE][ipt]->GetYaxis()->SetTitle("probability/bin");
+            hjetRatioE_Eta[iE][ipt]->GetYaxis()->SetTitle("probability");
 
         }       
     }

@@ -6,6 +6,7 @@ void NormalizeToProb(TH1F* hHisto);
 
 void ChangeTitleOfCanvas(TCanvas* cCanvas, TString sTitle);
 
+const double scalingFactor = 1e-9;
 const int SettingLogY = 1;
 
 //Draws detector level jet pT E and const spectra
@@ -16,16 +17,16 @@ void ChatGPT() {
     gStyle->SetHistLineWidth(5);
 
 
-    const double limitYconst = 0.2;
-    const double limitYpT    = 0.5;
-    const double limitYE     = 0.011;
-    const double limitYconstmin = 0.000000001;
-    const double limitYpTmin    = 0.000000001;
-    const double limitYEmin     = 0.0000001;
+    const double limitYconst = 1e10;//0.2;
+    const double limitYpT    = 1e12;//0.5;
+    const double limitYE     = 1e11;//0.011;
+    const double limitYconstmin = 0.000001;
+    const double limitYpTmin    = 100;
+    const double limitYEmin     = 10000;
     const double XpTmin     = 10; //change to 10 unless lowest bin, then 5
-    const double XpTmax     = 120;
-    const double XEmin     = 100; 
-    const double XEmax     = 1500;
+    const double XpTmax     = 200;
+    const double XEmin     = 10; 
+    const double XEmax     = 2000;
     //->GetYaxis()->SetRangeUser
 
     // Arrays to hold histograms for different types and R values
@@ -51,7 +52,7 @@ void ChatGPT() {
     Size_t  markerS[5]    = { 2, 2, 2.4, 2, 2};
 
     // Read histograms from the ROOT file
-    TFile* file = TFile::Open("JetJetOutput/July2023/data/ptmin10/Merged.root", "READ");
+    TFile* file = TFile::Open("Data20230728/Spectra/DetMerged.root", "READ");
     //TFile* file = TFile::Open("JetJetOutput/July2023/data/20230722_pythia8_JetJet_5-10GeV_Merged_Output.root", "READ");
     //TFile* file = TFile::Open("JetJetOutput/July2023/data/20230722_pythia8_JetJet_10-20GeV_Merged_Output.root", "READ");
     //TFile* file = TFile::Open("JetJetOutput/July2023/data/20230722_pythia8_JetJet_20-30GeV_Merged_Output.root", "READ");
@@ -78,7 +79,7 @@ void ChatGPT() {
         hist_pT_R[R] = (TH1F*)(file->Get(Form("hist_pT_R%d", R))->Clone());
         hist_pT_R[R]->SetLineColor(colors[R]);
         NormalizeToProb(hist_pT_R[R]);
-        hist_pT_R[R]->SetTitle(Form("pT Distribution for R = %d; pT [GeV/c]; Probability", R));
+        hist_pT_R[R]->SetTitle(Form("pT Distribution for R = %d; pT [GeV/c]; d#sigma/dp_{T}dy", R));
         hist_pT_R[R]->GetYaxis()->SetRangeUser(limitYpTmin,limitYpT);
         hist_pT_R[R]->GetXaxis()->SetRangeUser(XpTmin,XpTmax);
         //normalize all the histograms to the NofEntries (check if 1/Integral is enough etc. or nentries or what not)
@@ -87,7 +88,7 @@ void ChatGPT() {
         hist_E_R[R] = (TH1F*)(file->Get(Form("hist_E_R%d", R))->Clone());
         hist_E_R[R]->SetLineColor(colors[R]);
         NormalizeToProb(hist_E_R[R]);
-        hist_E_R[R]->SetTitle(Form("E Distribution for R = %d; E [GeV]; Probability", R));
+        hist_E_R[R]->SetTitle(Form("E Distribution for R = %d; E [GeV]; d#sigma/dEdy", R));
         hist_E_R[R]->GetYaxis()->SetRangeUser(limitYEmin,limitYE);
         hist_E_R[R]->GetXaxis()->SetRangeUser(XEmin,XEmax);
 
@@ -95,7 +96,7 @@ void ChatGPT() {
         hist_con_R[R] = (TH1F*)(file->Get(Form("hist_con_R%d", R))->Clone());
         hist_con_R[R]->SetLineColor(colors[R]);
         NormalizeToProb(hist_con_R[R]);
-        hist_con_R[R]->SetTitle(Form("Constituent Distribution for R = %d; Constituent N; Probability", R));
+        hist_con_R[R]->SetTitle(Form("Constituent Distribution for R = %d; Constituent N; d#sigma/dconstdy", R));
         hist_con_R[R]->GetYaxis()->SetRangeUser(limitYconstmin,limitYconst);
 
         for (int e = 0; e < 2; ++e) {
@@ -103,7 +104,7 @@ void ChatGPT() {
             hist_pT_R_e[R][e] = (TH1F*)(file->Get(Form("hist_pT_R%d_e%d", R, e))->Clone());
             hist_pT_R_e[R][e]->SetLineColor(colors[e]);
             NormalizeToProb(hist_pT_R_e[R][e]);
-            hist_pT_R_e[R][e]->SetTitle(Form("pT Distribution for R = %d, e = %d; pT [GeV/c]; Probability", R, e));
+            hist_pT_R_e[R][e]->SetTitle(Form("pT Distribution for R = %d, e = %d; pT [GeV/c]; d#sigma/dp_{T}dy", R, e));
             hist_pT_R_e[R][e]->GetYaxis()->SetRangeUser(limitYpTmin,limitYpT);
             hist_pT_R_e[R][e]->GetXaxis()->SetRangeUser(XpTmin,XpTmax);
 
@@ -111,7 +112,7 @@ void ChatGPT() {
             hist_E_R_e[R][e] = (TH1F*)(file->Get(Form("hist_E_R%d_e%d", R, e))->Clone());
             hist_E_R_e[R][e]->SetLineColor(colors[e]);
             NormalizeToProb(hist_E_R_e[R][e]);
-            hist_E_R_e[R][e]->SetTitle(Form("E Distribution for R = %d, e = %d; E [GeV]; Probability", R, e));
+            hist_E_R_e[R][e]->SetTitle(Form("E Distribution for R = %d, e = %d; E [GeV]; d#sigma/dEdy", R, e));
             hist_E_R_e[R][e]->GetYaxis()->SetRangeUser(limitYEmin,limitYE);
             hist_E_R_e[R][e]->GetXaxis()->SetRangeUser(XEmin,XEmax);
 
@@ -119,21 +120,21 @@ void ChatGPT() {
             hist_con_R_e[R][e] = (TH1F*)(file->Get(Form("hist_con_R%d_e%d", R, e))->Clone());
             hist_con_R_e[R][e]->SetLineColor(colors[e]);
             NormalizeToProb(hist_con_R_e[R][e]);
-            hist_con_R_e[R][e]->SetTitle(Form("Constituent Distribution for R = %d, e = %d; Constituent N; Probability", R, e));
+            hist_con_R_e[R][e]->SetTitle(Form("Constituent Distribution for R = %d, e = %d; Constituent N; d#sigma/dconst dy", R, e));
             hist_con_R_e[R][e]->GetYaxis()->SetRangeUser(limitYconstmin,limitYconst);
 
             for (int c = 0; c < 5; ++c) {
                 hist_pTvscon_R_e[R][e][c] = (TH1F*)(file->Get(Form("hist_pTvscon_R%d_e%d_c%d", R, e, c))->Clone());
                 hist_pTvscon_R_e[R][e][c]->SetLineColor(colors[c]);
                 NormalizeToProb(hist_pTvscon_R_e[R][e][c]);
-                hist_pTvscon_R_e[R][e][c]->SetTitle(Form("Constituent N = %d pT Distribution for detector jets, R = %0.1f, %s; pT [GeV/c]; Probability", ConstVals[c], Rvals[R], etaRange[e].Data()));
+                hist_pTvscon_R_e[R][e][c]->SetTitle(Form("Constituent N = %d pT Distribution for detector jets, R = %0.1f, %s; pT [GeV/c]; d#sigma/dp_{T}dy", ConstVals[c], Rvals[R], etaRange[e].Data()));
                 hist_pTvscon_R_e[R][e][c]->GetYaxis()->SetRangeUser(limitYpTmin,limitYpT);
                 hist_pTvscon_R_e[R][e][c]->GetXaxis()->SetRangeUser(XpTmin,XpTmax);
 
                 hist_Evscon_R_e[R][e][c] = (TH1F*)(file->Get(Form("hist_Evscon_R%d_e%d_c%d", R, e, c))->Clone());
                 hist_Evscon_R_e[R][e][c]->SetLineColor(colors[c]);
                 NormalizeToProb(hist_Evscon_R_e[R][e][c]);
-                hist_Evscon_R_e[R][e][c]->SetTitle(Form("Constituent N = %d E Distribution for detector jets, R = %0.1f, %s; E [GeV]; Probability", ConstVals[c], Rvals[R], etaRange[e].Data()));
+                hist_Evscon_R_e[R][e][c]->SetTitle(Form("Constituent N = %d E Distribution for detector jets, R = %0.1f, %s; E [GeV]; d#sigma/dpEdy", ConstVals[c], Rvals[R], etaRange[e].Data()));
                 hist_Evscon_R_e[R][e][c]->GetYaxis()->SetRangeUser(limitYEmin,limitYE);
                 hist_Evscon_R_e[R][e][c]->GetXaxis()->SetRangeUser(XEmin,XEmax);
 
@@ -143,13 +144,13 @@ void ChatGPT() {
             hist_pTvscon_R[R][c] = (TH1F*)(file->Get(Form("hist_pTvscon_R%d_c%d", R, c))->Clone());
             hist_pTvscon_R[R][c]->SetLineColor(colors[c]);
             NormalizeToProb(hist_pTvscon_R[R][c]);
-            hist_pTvscon_R[R][c]->SetTitle(Form("Constituent N = %d pT Distribution for detector jets, R = %0.1f; pT [GeV/c]; Probability", ConstVals[c], Rvals[R]));
+            hist_pTvscon_R[R][c]->SetTitle(Form("Constituent N = %d pT Distribution for detector jets, R = %0.1f; pT [GeV/c]; d#sigma/dp_{T}dy", ConstVals[c], Rvals[R]));
             hist_pTvscon_R[R][c]->GetYaxis()->SetRangeUser(limitYpTmin,limitYpT);
 
             hist_Evscon_R[R][c] = (TH1F*)(file->Get(Form("hist_Evscon_R%d_c%d", R, c))->Clone());
             hist_Evscon_R[R][c]->SetLineColor(colors[c]);
             NormalizeToProb(hist_Evscon_R[R][c]);
-            hist_Evscon_R[R][c]->SetTitle(Form("Constituent N = %d E Distribution for detector jets, R = %0.1f; E [GeV]; Probability", ConstVals[c], Rvals[R]));
+            hist_Evscon_R[R][c]->SetTitle(Form("Constituent N = %d E Distribution for detector jets, R = %0.1f; E [GeV]; d#sigma/dEdy", ConstVals[c], Rvals[R]));
             hist_Evscon_R[R][c]->GetYaxis()->SetRangeUser(limitYEmin,limitYE);
 
         }
@@ -159,24 +160,38 @@ void ChatGPT() {
     // Close the ROOT file
     //file->Close();
 
+    //fit function [0]*TMath::Power(x-[1],[2]) into the pT spectra for all R and then only for R=0.4
+
     // Draw histograms for hist_pT_R[3]
     TCanvas* canvas_pT_R = new TCanvas("canvas_pT_R", "Histogram Canvas (pT_R)", 900, 600);
     canvas_pT_R->SetWindowSize(900, 600);
     canvas_pT_R->SetCanvasSize(900, 600);
 
     canvas_pT_R->cd();
+/*
+    TF1  *f1 = new TF1("f1","[0]*(1./TMath::Power(x,[1]))"); //[0]*TMath::Power(x-[1],[2]) ,25,XpTmax
+    TF1  *f2 = new TF1("f2","[0]*(1./TMath::Power(x,[1]))");
+    TF1  *f3 = new TF1("f3","[0]*(1./TMath::Power(x,[1]))");
+
+    //hist_pT_R[0]->Fit("f1","","",25,XpTmax);
+    hist_pT_R[1]->Fit("f2","","",20,100);
+    //hist_pT_R[2]->Fit("f3","","",25,XpTmax);
+*/
+
     hist_pT_R[0]->Draw("");
 
     TLegend* legend_pT_R = new TLegend(0.7, 0.7, 0.9, 0.9);
     legend_pT_R->AddEntry(hist_pT_R[0], Form("R = %.1f", Rvals[0]), "l");
+
     for (int R = 1; R < 3; ++R) {
         hist_pT_R[R]->Draw(" SAME");
         legend_pT_R->AddEntry(hist_pT_R[R], Form("R = %.1f", Rvals[R]), "l");
 
     }
+
     legend_pT_R->Draw(); // Add legend to the canvas
     ChangeTitleOfCanvas(canvas_pT_R, "Detector level jet pT");
-    canvas_pT_R->SaveAs("figs/July2023/ptmin10/spectra/det/canvas_pT_R.png");
+    canvas_pT_R->SaveAs("figs/Spectra/Detcanvas_pT_R.png");
 
     // Draw histograms for hist_E_R[3]
     TCanvas* canvas_E_R = new TCanvas("canvas_E_R", "Histogram Canvas (E_R)", 900, 600);
@@ -195,8 +210,8 @@ void ChatGPT() {
 
     legend_E_R->Draw(); // Add legend to the canvas
     ChangeTitleOfCanvas(canvas_E_R, "Detector level jet E");
-    canvas_E_R->SaveAs("figs/July2023/ptmin10/spectra/det/canvas_E_R.png");
-
+    canvas_E_R->SaveAs("figs/Spectra/Detcanvas_E_R.png");
+/*
     // Draw histograms for hist_con_R[3]
     TCanvas* canvas_con_R = new TCanvas("canvas_con_R", "Histogram Canvas (con_R)", 900, 600);
     canvas_con_R->SetWindowSize(900, 600);
@@ -214,7 +229,8 @@ void ChatGPT() {
 
     legend_con_R->Draw(); // Add legend to the canvas
     ChangeTitleOfCanvas(canvas_con_R, "Detector level jet constituent N");
-    canvas_con_R->SaveAs("figs/July2023/ptmin10/spectra/det/canvas_con_R.png");
+    canvas_con_R->SaveAs("figs/Spectra/Detcanvas_con_R.png");
+    */
 
     // Draw the hist_pT_R_e histograms for each R value in separate canvases and one plot each
     for (int R = 0; R < 3; ++R) {
@@ -234,7 +250,7 @@ void ChatGPT() {
 
         legend_pT_R_e->Draw(); // Add legend to the canvas
         ChangeTitleOfCanvas(canvas_pT_R_e, Form("Detector level jet pT, R = %0.1f", Rvals[R]));
-        canvas_pT_R_e->SaveAs(Form("figs/July2023/ptmin10/spectra/det/canvas_pT_R%d_e.png", R));
+        canvas_pT_R_e->SaveAs(Form("figs/Spectra/Detcanvas_pT_R%d_e.png", R));
     }
 
     // Draw the hist_E_R_e histograms for each R value in separate canvases and one plot each
@@ -255,9 +271,9 @@ void ChatGPT() {
 
         legend_E_R_e->Draw(); // Add legend to the canvas
         ChangeTitleOfCanvas(canvas_E_R_e, Form("Detector level jet E, R = %0.1f", Rvals[R]));
-        canvas_E_R_e->SaveAs(Form("figs/July2023/ptmin10/spectra/det/canvas_E_R%d_e.png", R));
+        canvas_E_R_e->SaveAs(Form("figs/Spectra/Detcanvas_E_R%d_e.png", R));
     }
-
+/*
     // Draw the hist_con_R_e histograms for each R value in separate canvases and one plot each
     for (int R = 0; R < 3; ++R) {
         TCanvas* canvas_con_R_e = new TCanvas(Form("canvas_con_R%d_e", R), Form("Histogram Canvas (con_R = %d, e)", R), 900, 600);
@@ -276,7 +292,7 @@ void ChatGPT() {
 
         legend_con_R_e->Draw(); // Add legend to the canvas
         ChangeTitleOfCanvas(canvas_con_R_e, Form("Detector level jet constituents, R = %0.1f", Rvals[R]));
-        canvas_con_R_e->SaveAs(Form("figs/July2023/ptmin10/spectra/det/canvas_con_R%d_e.png", R));
+        canvas_con_R_e->SaveAs(Form("figs/Spectra/Detcanvas_con_R%d_e.png", R));
     }
 
     // Draw histograms for hist_pTvscon_R_e[3][2][5]
@@ -296,7 +312,7 @@ void ChatGPT() {
             }
             legend_pTvscon_R_e->Draw(); // Add legend to the canvas
             ChangeTitleOfCanvas(canvas_pTvscon_R_e, Form("Detector level jet pT, R = %0.1f, %s", Rvals[R], etaRange[e].Data()));
-            canvas_pTvscon_R_e->SaveAs(Form("figs/July2023/ptmin10/spectra/det/canvas_pTvscon_R%d_e%d.png", R, e));
+            canvas_pTvscon_R_e->SaveAs(Form("figs/Spectra/Detcanvas_pTvscon_R%d_e%d.png", R, e));
         }
     }
 
@@ -317,7 +333,7 @@ void ChatGPT() {
             }
             legend_Evscon_R_e->Draw(); // Add legend to the canvas
             ChangeTitleOfCanvas(canvas_Evscon_R_e, Form("Detector level jet E, R = %0.1f, %s", Rvals[R], etaRange[e].Data()));
-            canvas_Evscon_R_e->SaveAs(Form("figs/July2023/ptmin10/spectra/det/canvas_Evscon_R%d_e%d.png", R, e));
+            canvas_Evscon_R_e->SaveAs(Form("figs/Spectra/Detcanvas_Evscon_R%d_e%d.png", R, e));
         }
     }
 
@@ -339,7 +355,7 @@ void ChatGPT() {
 
         legend_pTvscon_R->Draw(); // Add legend to the canvas
         ChangeTitleOfCanvas(canvas_pTvscon_R, Form("Detector level jet pT, R = %0.1f", Rvals[R]));
-        canvas_pTvscon_R->SaveAs(Form("figs/July2023/ptmin10/spectra/det/canvas_pTvscon_R%d.png", R));
+        canvas_pTvscon_R->SaveAs(Form("figs/Spectra/Detcanvas_pTvscon_R%d.png", R));
     }
 
     // Draw histograms for hist_Evscon_R[3][5]
@@ -360,10 +376,10 @@ void ChatGPT() {
 
         legend_Evscon_R->Draw(); // Add legend to the canvas
         ChangeTitleOfCanvas(canvas_Evscon_R, Form("Detector level jet E, R = %0.1f", Rvals[R]));
-        canvas_Evscon_R->SaveAs(Form("figs/July2023/ptmin10/spectra/det/canvas_Evscon_R%d.png", R));
+        canvas_Evscon_R->SaveAs(Form("figs/Spectra/Detcanvas_Evscon_R%d.png", R));
     }
 
-
+*/
 //file->Close();
 }
 
@@ -371,7 +387,9 @@ void ChatGPT() {
 
 void NormalizeToProb(TH1F* hHisto){
     Double_t factor = 1.;
-    if (hHisto!=NULL) hHisto->Scale(factor/hHisto->Integral(), "width");
+    //if (hHisto!=NULL) hHisto->Scale(factor/hHisto->Integral(), "width");
+    //Add the following line to scale to picobarns
+    if (hHisto!=NULL) hHisto->Scale(factor/scalingFactor, "width");
 }
 
 void ChangeTitleOfCanvas(TCanvas* cCanvas, TString sTitle){

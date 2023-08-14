@@ -9,9 +9,9 @@ void ChangeTitleOfCanvas(TCanvas* cCanvas, TString sTitle);
 //Draw fraction histos from v1 code (no 2D fraction plot)
 void JetPlottingMergedFractionsEightPlot(int NormValue=8)
 {   
-    const double limitYconst = 0.5;
-    const double limitYpT    = 0.25;
-    const double limitYEta     = 0.25;
+    const double limitYconst = 0.3;
+    const double limitYpT    = 0.15;
+    const double limitYEta     = 0.13;
     const double limitYconstmin = 0.0;
     const double limitYpTmin    = 0.0;
     const double limitYEtamin     = 0.0;
@@ -20,16 +20,17 @@ void JetPlottingMergedFractionsEightPlot(int NormValue=8)
     gStyle->SetOptTitle(0);
 //setting NormValue = 8 if merged file in use
 
+    if(NormValue!=8) return;
     TFile *fin;
-    if(NormValue==0)fin = new TFile("JetJetOutput/July2023/ptmin10/fractions/20230722_pythia8_JetJet_5-10GeV_Merged_Output.root", "READ");
+    /*if(NormValue==0)fin = new TFile("JetJetOutput/July2023/ptmin10/fractions/20230722_pythia8_JetJet_5-10GeV_Merged_Output.root", "READ");
     if(NormValue==1)fin = new TFile("JetJetOutput/July2023/ptmin10/fractions/20230722_pythia8_JetJet_10-20GeV_Merged_Output.root", "READ");
     if(NormValue==2)fin = new TFile("JetJetOutput/July2023/ptmin10/fractions/20230722_pythia8_JetJet_20-30GeV_Merged_Output.root", "READ");
     if(NormValue==3)fin = new TFile("JetJetOutput/July2023/ptmin10/fractions/20230722_pythia8_JetJet_30-40GeV_Merged_Output.root", "READ");
     if(NormValue==4)fin = new TFile("JetJetOutput/July2023/ptmin10/fractions/20230722_pythia8_JetJet_40-60GeV_Merged_Output.root", "READ");
     if(NormValue==5)fin = new TFile("JetJetOutput/July2023/ptmin10/fractions/20230722_pythia8_JetJet_60-100GeV_Merged_Output.root", "READ");
     if(NormValue==6)fin = new TFile("JetJetOutput/July2023/ptmin10/fractions/20230722_pythia8_JetJet_100-200GeV_Merged_Output.root", "READ");
-    if(NormValue==7)fin = new TFile("JetJetOutput/July2023/ptmin10/fractions/20230722_pythia8_JetJet_200-GeV_Merged_Output.root", "READ");
-    if(NormValue==8)fin = new TFile("JetJetOutput/July2023/ptmin10/fractions/Merged.root", "READ");
+    if(NormValue==7)fin = new TFile("JetJetOutput/July2023/ptmin10/fractions/20230722_pythia8_JetJet_200-GeV_Merged_Output.root", "READ");*/
+    if(NormValue==8)fin = new TFile("Data20230728/FRAC/Merged.root", "READ");
 
     //Add normalization to probability density function: 1/Int, "width"
 
@@ -48,9 +49,9 @@ void JetPlottingMergedFractionsEightPlot(int NormValue=8)
 
     // Energy and pT binning
     const Int_t nEBins = 6;
-    const Int_t npTBins = 9;
+    const Int_t npTBins = 8;
     const double JetEBorders[nEBins] = {100.0, 400.0, 800.0, 1200.0, 1600.0, 2000.0}; 
-    const double JetpTBorders[npTBins] = {5.0, 10.0, 20.0, 40.0, 60.0, 80.0, 100.0, 150.0, 200.0}; 
+    const double JetpTBorders[npTBins] = {5.0, 10.0, 20.0, 40.0, 60.0, 80.0, 100.0, 150.0};//, 200.0}; 
 
     const Int_t nConst = 5;
     const Int_t ConstVals[nConst] = {1, 2, 3, 5, 10}; // Constituent values to check
@@ -155,9 +156,9 @@ void JetPlottingMergedFractionsEightPlot(int NormValue=8)
 
         // Set x-axis titles
         hDetECAL[Rvalue]->GetXaxis()->SetTitle("E_{ECAL}/E_{jet}^{det}");
-        hPartNeutralMatch[Rvalue]->GetXaxis()->SetTitle("E_{neutral}/E_{jet}^{part}");
+        hPartNeutralMatch[Rvalue]->GetXaxis()->SetTitle("E_{neutral}/E_{part}");
         hDetECALAll[Rvalue]->GetXaxis()->SetTitle("E_{ECAL}/E_{jet}^{det}");
-        hPartNeutral[Rvalue]->GetXaxis()->SetTitle("E_{neutral}/E_{jet}^{part}");
+        hPartNeutral[Rvalue]->GetXaxis()->SetTitle("E_{neutral}/E_{part}");
 
         // Draw histograms on the corresponding canvas
         cDetECAL->cd();
@@ -187,8 +188,10 @@ void JetPlottingMergedFractionsEightPlot(int NormValue=8)
 
 	    TCanvas *cDetECALEta = new TCanvas("cDetECALEta", "Matched detector level jet ECAL energy fraction distribution, eta", 800, 600);
 	    TCanvas *cPartNeutralMatchEta = new TCanvas("cPartNeutralMatchEta", "Matched particle level jet neutral energy fraction distribution, eta", 800, 600);
+        TCanvas *cPartNeutralEta = new TCanvas("cPartNeutralEta", "Total particle level jet neutral energy fraction distribution, eta", 800, 600);
 		TLegend *legendDetECALEta = new TLegend(0.7, 0.7, 0.9, 0.9);
 		TLegend *legendPartNeutralMatchEta = new TLegend(0.7, 0.7, 0.9, 0.9);
+        TLegend *legendPartNeutralEta = new TLegend(0.65, 0.7, 0.85, 0.85);legendPartNeutralEta->SetBorderSize(0);
     	for (int ieta = 0; ieta < nEtaBins-1; ++ieta) {
 
             // Set line color and marker style based on Rvalue
@@ -196,10 +199,13 @@ void JetPlottingMergedFractionsEightPlot(int NormValue=8)
             hDetECALEta[Rvalue][ieta]->SetMarkerStyle(gmarkers[ieta]);
             hPartNeutralMatchEta[Rvalue][ieta]->SetLineColor(gcolors[ieta]);
             hPartNeutralMatchEta[Rvalue][ieta]->SetMarkerStyle(gmarkers[ieta]);
+            hPartNeutralEta[Rvalue][ieta]->SetLineColor(gcolors[ieta]);
+            hPartNeutralEta[Rvalue][ieta]->SetMarkerStyle(gmarkers[ieta]);
 
             // Set x-axis titles
             hDetECALEta[Rvalue][ieta]->GetXaxis()->SetTitle("E_{ECAL}/E_{jet}^{det}");
-            hPartNeutralMatchEta[Rvalue][ieta]->GetXaxis()->SetTitle("E_{neutral}/E_{jet}^{part}");
+            hPartNeutralMatchEta[Rvalue][ieta]->GetXaxis()->SetTitle("E_{neutral}/E_{part}");
+            hPartNeutralEta[Rvalue][ieta]->GetXaxis()->SetTitle("E_{neutral}/E_{part}");
 
             // Draw histograms on the corresponding canvas
             cDetECALEta->cd();
@@ -213,6 +219,13 @@ void JetPlottingMergedFractionsEightPlot(int NormValue=8)
             else hPartNeutralMatchEta[Rvalue][ieta]->Draw("same");
 		    legendPartNeutralMatchEta->AddEntry(hPartNeutralMatchEta[Rvalue][ieta], Form("%s", etaRange[ieta].Data()), "pl");
 		    legendPartNeutralMatchEta->Draw();
+
+
+            cPartNeutralEta->cd();
+            if (ieta == 0) hPartNeutralEta[Rvalue][ieta]->Draw();
+            else hPartNeutralEta[Rvalue][ieta]->Draw("same");
+            legendPartNeutralEta->AddEntry(hPartNeutralEta[Rvalue][ieta], Form("%s", etaRange[ieta].Data()), "pl");
+            legendPartNeutralEta->Draw();
 
 
 		    TCanvas *cDetECALEtaConst = new TCanvas("cDetECALEtaConst", "Matched detector level jet ECAL energy fraction distribution, eta, const", 800, 600);
@@ -230,7 +243,7 @@ void JetPlottingMergedFractionsEightPlot(int NormValue=8)
 
                 // Set x-axis titles
                 hDetECALEtaConst[Rvalue][ieta][iconst]->GetXaxis()->SetTitle("E_{ECAL}/E_{jet}^{det}");
-                hPartNeutralMatchEtaConst[Rvalue][ieta][iconst]->GetXaxis()->SetTitle("E_{neutral}/E_{jet}^{part}");
+                hPartNeutralMatchEtaConst[Rvalue][ieta][iconst]->GetXaxis()->SetTitle("E_{neutral}/E_{part}");
 
                 // Draw histograms on the corresponding canvas
 	            cDetECALEtaConst->cd();
@@ -246,16 +259,18 @@ void JetPlottingMergedFractionsEightPlot(int NormValue=8)
 			    legendPartNeutralMatchEtaConst->Draw();
             }
             ChangeTitleOfCanvas(cDetECALEtaConst, Form("Matched detector level jet ECAL energy fraction, %s, R=%0.1f", etaRange[ieta].Data(), Rvals[Rvalue]));
-		    cDetECALEtaConst->SaveAs(Form("fractionFigs/ptmin10/cDetECALEta_%dConst_R%d.png",ieta, Rvalue));
+		    cDetECALEtaConst->SaveAs(Form("figs/FRAC/cDetECALEta_%dConst_R%d.png",ieta, Rvalue));
             ChangeTitleOfCanvas(cPartNeutralMatchEtaConst, Form("Matched particle level jet neutral energy fraction, %s, R=%0.1f", etaRange[ieta].Data(), Rvals[Rvalue]));
-		    cPartNeutralMatchEtaConst->SaveAs(Form("fractionFigs/ptmin10/cPartNeutralMatchEta_%dConst_R%d.png", ieta, Rvalue));
+		    cPartNeutralMatchEtaConst->SaveAs(Form("figs/FRAC/cPartNeutralMatchEta_%dConst_R%d.png", ieta, Rvalue));
 
         }
         ChangeTitleOfCanvas(cDetECALEta, Form("Matched detector level jet ECAL energy fraction, R=%0.1f", Rvals[Rvalue]));
-	    cDetECALEta->SaveAs(Form("fractionFigs/ptmin10/cDetECALEta_R%d.png", Rvalue));
+	    cDetECALEta->SaveAs(Form("figs/FRAC/cDetECALEta_R%d.png", Rvalue));
         ChangeTitleOfCanvas(cPartNeutralMatchEta, Form("Matched particle level jet neutral energy fraction, R=%0.1f", Rvals[Rvalue]));
-	    cPartNeutralMatchEta->SaveAs(Form("fractionFigs/ptmin10/cPartNeutralMatchEta_R%d.png", Rvalue));
-
+	    cPartNeutralMatchEta->SaveAs(Form("figs/FRAC/cPartNeutralMatchEta_R%d.png", Rvalue));
+        ChangeTitleOfCanvas(cPartNeutralEta, Form("Total particle level jet neutral energy fraction, R=%0.1f", Rvals[Rvalue]));
+        cPartNeutralEta->SaveAs(Form("figs/FRAC/cPartNeutralEta_R%d.png", Rvalue));
+/*
 	    TCanvas *cDetECALConst = new TCanvas("cDetECALConst", "Matched detector level jet ECAL energy fraction distribution, const", 800, 600);
 	    TCanvas *cPartNeutralMatchConst = new TCanvas("cPartNeutralMatchConst", "Matched particle level jet neutral energy fraction distribution, const", 800, 600);
 		TLegend *legendDetECALConst = new TLegend(0.7, 0.7, 0.9, 0.9);
@@ -271,7 +286,7 @@ void JetPlottingMergedFractionsEightPlot(int NormValue=8)
 
             // Set x-axis titles
             hDetECALConst[Rvalue][iconst]->GetXaxis()->SetTitle("E_{ECAL}/E_{jet}^{det}");
-            hPartNeutralMatchConst[Rvalue][iconst]->GetXaxis()->SetTitle("E_{neutral}/E_{jet}^{part}");
+            hPartNeutralMatchConst[Rvalue][iconst]->GetXaxis()->SetTitle("E_{neutral}/E_{part}");
 
             // Draw histograms on the corresponding canvas
             cDetECALConst->cd();
@@ -288,21 +303,23 @@ void JetPlottingMergedFractionsEightPlot(int NormValue=8)
 
         } 
         ChangeTitleOfCanvas(cDetECALConst, Form("Matched detector level jet ECAL energy fraction, R=%0.1f", Rvals[Rvalue]));
-	    cDetECALConst->SaveAs(Form("fractionFigs/ptmin10/cDetECALConst_R%d.png", Rvalue));
+	    cDetECALConst->SaveAs(Form("figs/FRAC/cDetECALConst_R%d.png", Rvalue));
         ChangeTitleOfCanvas(cPartNeutralMatchConst, Form("Matched particle level jet neutral energy fraction, R=%0.1f", Rvals[Rvalue]));
-	    cPartNeutralMatchConst->SaveAs(Form("fractionFigs/ptmin10/cPartNeutralMatchConst_R%d.png", Rvalue));
+	    cPartNeutralMatchConst->SaveAs(Form("figs/FRAC/cPartNeutralMatchConst_R%d.png", Rvalue));
+
+*///skip constituent plots for now
     
     }
 
     // Save canvases as PNG images
     ChangeTitleOfCanvas(cDetECAL, "Matched detector level jet ECAL energy fraction");
-    cDetECAL->SaveAs("fractionFigs/ptmin10/cDetECAL.png");
+    cDetECAL->SaveAs("figs/FRAC/cDetECAL.png");
     ChangeTitleOfCanvas(cPartNeutralMatch, "Matched particle level jet neutral energy fraction");
-    cPartNeutralMatch->SaveAs("fractionFigs/ptmin10/cPartNeutralMatch.png");
+    cPartNeutralMatch->SaveAs("figs/FRAC/cPartNeutralMatch.png");
     ChangeTitleOfCanvas(cDetECALAll, "Total detector level jet ECAL energy fraction");
-    cDetECALAll->SaveAs("fractionFigs/ptmin10/cDetECALAll.png");
+    cDetECALAll->SaveAs("figs/FRAC/cDetECALAll.png");
     ChangeTitleOfCanvas(cPartNeutral, "Total particle level jet neutral energy fraction");
-    cPartNeutral->SaveAs("fractionFigs/ptmin10/cPartNeutral.png");
+    cPartNeutral->SaveAs("figs/FRAC/cPartNeutral.png");
 
 
 }
@@ -315,9 +332,9 @@ void NormalizeToProb(TH1F* hHisto){
 
 void ChangeTitleOfCanvas(TCanvas* cCanvas, TString sTitle){
     cCanvas->cd();
-    TLatex *   tex = new TLatex(0.08,0.92,Form("%s", sTitle.Data()));
+    TLatex *   tex = new TLatex(0.25,0.92,Form("%s", sTitle.Data()));
     tex->SetNDC();
-    tex->SetTextSize(0.038);
+    tex->SetTextSize(0.03);
     tex->Draw();
     //if(SettingLogY==1) cCanvas->SetLogy();
 }

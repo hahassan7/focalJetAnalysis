@@ -22,8 +22,8 @@
 Double_t textSize = 0.045;
 
 void focalJetResolutionsEta( 
-                          TString inputfileR02 = "JetJetOutput/FINALAN/oneETAMerged20230417_0-1000GeV_OutputR6.root", 
-                          TString inputfileR04 = "JetJetOutput/FINALAN/oneETAMerged20230417_0-1000GeV_OutputR4.root"
+                          TString inputfileR02 = "JetJetOutput/July2023/ptmin10/JES/Merged_OutputR6.root", 
+                          TString inputfileR04 = "JetJetOutput/July2023/ptmin10/JES/Merged_OutputR4.root"
                         ){
     StyleSettingsPaper();
     TGaxis::SetMaxDigits(4);
@@ -38,20 +38,22 @@ void focalJetResolutionsEta(
     TString radiusOut[2]    = {"R06", "R04"};
     TString radiusLabel[2]  = {"#it{R} = 0.6", "#it{R} = 0.4"};
     TString etaOut[3]       = {"Full", "38to45", "45to51"};
-    TString etaRange[9]     = {"3.6< #eta_{jet} < 3.8", "3.8 < #eta_{jet} < 4.0", "4.0 < #eta_{jet} < 4.2","4.2< #eta_{jet} < 4.4","4.4< #eta_{jet} < 4.6","4.6< #eta_{jet} < 4.8","4.8< #eta_{jet} < 5.0","5.0< #eta_{jet} < 5.2","5.2< #eta_{jet} < 5.4"}; //{3.8, 4.6, 5.4}
+    //TString etaRange[9]     = {"3.6< #eta_{jet} < 3.8", "3.8 < #eta_{jet} < 4.0", "4.0 < #eta_{jet} < 4.2","4.2< #eta_{jet} < 4.4","4.4< #eta_{jet} < 4.6","4.6< #eta_{jet} < 4.8","4.8< #eta_{jet} < 5.0","5.0< #eta_{jet} < 5.2","5.2< #eta_{jet} < 5.4"}; //{3.8, 4.6, 5.4}
+    
+    TString etaRange[3] = {"3.8 < #eta_{jet} < 4.2","4.2 < #eta_{jet} < 4.6","4.6 < #eta_{jet} < 5.1"}; // {3.8, 4.2, 4.6, 5.1}. 
     Double_t rangeJES[2][2] = { {-0.7, -0.05}, {-0.7, 0.1} };
 
-    Int_t nEtaBins  = 10;
+    Int_t nEtaBins  = 4;//10;
     Int_t maxNEbins        = 5;
-    Int_t exampleBins[3]    = {1,3,6};
+    Int_t exampleBins[3]    = {0,1,2};
     //Double_t binningE[11]  = {0.0, 200.0, 400.0, 600.0, 800.0, 1000.0, 1200.0, 1400.0, 1600.0, 1800.0, 2000.0}; 
     Double_t binningE[6]  = {0.0, 400.0, 800.0, 1200.0, 1600.0, 2000.0};  
     
-    TH2D* histResponseMat_E[2][11];
-    TH1D* histMean_E[2][10];
-    TH1D* histMedian_E[2][10];
-    TH1D* histSigma_E[2][10];
-    TH1D* histDeltaE_bins[2][11][10];
+    TH2D* histResponseMat_E[2][5];
+    TH1D* histMean_E[2][5];
+    TH1D* histMedian_E[2][5];
+    TH1D* histSigma_E[2][5];
+    TH1D* histDeltaE_bins[2][5][4];
 
     TFile* fileR02 = new TFile(inputfileR02.Data());
     for (Int_t i = 0; i < maxNEbins; i++){
@@ -116,7 +118,7 @@ void focalJetResolutionsEta(
         
         cJES->cd();
         cJES->Update();
-        cJES->SaveAs(Form("JES_%s.pdf", radiusOut[r].Data()));
+        cJES->SaveAs(Form("JES_%s.png", radiusOut[r].Data()));
 
         cJER->Clear();
         jerframe->Draw("axis");
@@ -134,7 +136,7 @@ void focalJetResolutionsEta(
         
         cJER->cd();
         cJER->Update();
-        cJER->SaveAs(Form("JER_%s.pdf", radiusOut[r].Data()));
+        cJER->SaveAs(Form("JER_%s.png", radiusOut[r].Data()));
     }
 
     for (Int_t e = 0; e < 3; e++){
@@ -157,7 +159,7 @@ void focalJetResolutionsEta(
         
         cJES->cd();
         cJES->Update();
-        cJES->SaveAs(Form("JES_%s.pdf", etaOut[e].Data()));
+        cJES->SaveAs(Form("JES_%s.png", etaOut[e].Data()));
 
         cJER->Clear();
         jerframe->Draw("axis");
@@ -176,7 +178,7 @@ void focalJetResolutionsEta(
         
         cJER->cd();
         cJER->Update();
-        cJER->SaveAs(Form("JER_%s.pdf", etaOut[e].Data()));
+        cJER->SaveAs(Form("JER_%s.png", etaOut[e].Data()));
     }
     
         // Style projection
@@ -200,7 +202,7 @@ void focalJetResolutionsEta(
         drawLatexAdd(Form("jets, anti-#it{k}_{T}, %s",radiusLabel[r].Data()),0.85,0.14+0.9*textSize, 0.85*textSize,kFALSE, kFALSE, kTRUE);  
         drawLatexAdd(Form("%s", etaRange[e].Data()),0.85,0.14, 0.85*textSize,kFALSE, kFALSE, kTRUE);  
         cCorr->Update();
-        cCorr->SaveAs(Form("ResponseMatrix_%s_%s.pdf",etaOut[e].Data(), radiusOut[r].Data()));
+        cCorr->SaveAs(Form("ResponseMatrix_%s_%s.png",etaOut[e].Data(), radiusOut[r].Data()));
       }
     }
     
@@ -303,7 +305,7 @@ void focalJetResolutionsEta(
         
       cSlicesJES->cd();
       cSlicesJES->Update();
-      cSlicesJES->SaveAs(Form("JetEscaleProj_%s.pdf",radiusOut[r].Data()));
+      cSlicesJES->SaveAs(Form("JetEscaleProj_%s.png",radiusOut[r].Data()));
     }
 
     for (Int_t e = 0; e < 3; e++){
@@ -376,7 +378,7 @@ void focalJetResolutionsEta(
         
       cSlicesJES->cd();
       cSlicesJES->Update();
-      cSlicesJES->SaveAs(Form("JetEscaleProj_%s.pdf",etaOut[e].Data()));
+      cSlicesJES->SaveAs(Form("JetEscaleProj_%s.png",etaOut[e].Data()));
     }
     
     

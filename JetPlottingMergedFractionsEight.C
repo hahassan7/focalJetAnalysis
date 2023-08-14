@@ -6,28 +6,25 @@ void JetPlottingMergedFractionsEight(int NormValue=0) //loops over R and saves t
 {   
 
     const int nNorm = 8;
-    const Float_t normalizations[nNorm] = {0.0610658,0.00716477,0.000557627,0.000107816,4.31694e-05,9.62255e-06,1.24904e-06,5.99517e-08};
+    const Float_t normalizations[nNorm] = {0.0611191, 0.00717001, 0.000558759, 0.000107936, 4.32163e-05, 9.57109e-06, 1.24606e-06, 6.01382e-08};//{0.0610658,0.00716477,0.000557627,0.000107816,4.31694e-05,9.62255e-06,1.24904e-06,5.99517e-08};
 
     //int NormValue = 0;
 
     TFile *jetFile;
     
-    //Read in the data
-    //if(NormValue==0)jetFile = TFile::Open("/home/lmh/alice/fromPuhti/April2023/pTmin2_20230417_pythia8_JetJet_5-15GeV/Merged.root");
-    if(NormValue==0)jetFile = TFile::Open("/home/lmh/alice/fromPuhti/July2023/ptmin10/fractions/fractions_ptmin10_20230722_pythia8_JetJet_5-10GeV/Merged.root");
-    if(NormValue==1)jetFile = TFile::Open("/home/lmh/alice/fromPuhti/July2023/ptmin10/fractions/fractions_ptmin10_20230722_pythia8_JetJet_10-20GeV/Merged.root");
-    if(NormValue==2)jetFile = TFile::Open("/home/lmh/alice/fromPuhti/July2023/ptmin10/fractions/fractions_ptmin10_20230722_pythia8_JetJet_20-30GeV/Merged.root");
-    if(NormValue==3)jetFile = TFile::Open("/home/lmh/alice/fromPuhti/July2023/ptmin10/fractions/fractions_ptmin10_20230722_pythia8_JetJet_30-40GeV/Merged.root");
-    if(NormValue==4)jetFile = TFile::Open("/home/lmh/alice/fromPuhti/July2023/ptmin10/fractions/fractions_ptmin10_20230722_pythia8_JetJet_40-60GeV/Merged.root");
-    if(NormValue==5)jetFile = TFile::Open("/home/lmh/alice/fromPuhti/July2023/ptmin10/fractions/fractions_ptmin10_20230722_pythia8_JetJet_60-100GeV/Merged.root");
-    if(NormValue==6)jetFile = TFile::Open("/home/lmh/alice/fromPuhti/July2023/ptmin10/fractions/fractions_ptmin10_20230722_pythia8_JetJet_100-200GeV/Merged.root");
-    if(NormValue==7)jetFile = TFile::Open("/home/lmh/alice/fromPuhti/July2023/ptmin10/fractions/fractions_ptmin10_20230722_pythia8_JetJet_200-GeV/Merged.root");
+    if(NormValue==0)jetFile = TFile::Open("/home/lmh/alice/fromPuhti/July2023/20230728JetJet/20230728_pythia8_JetJet_5-10GeV/Merged.root");
+    if(NormValue==1)jetFile = TFile::Open("/home/lmh/alice/fromPuhti/July2023/20230728JetJet/20230728_pythia8_JetJet_10-20GeV/Merged.root");
+    if(NormValue==2)jetFile = TFile::Open("/home/lmh/alice/fromPuhti/July2023/20230728JetJet/20230728_pythia8_JetJet_20-30GeV/Merged.root");
+    if(NormValue==3)jetFile = TFile::Open("/home/lmh/alice/fromPuhti/July2023/20230728JetJet/20230728_pythia8_JetJet_30-40GeV/Merged.root");
+    if(NormValue==4)jetFile = TFile::Open("/home/lmh/alice/fromPuhti/July2023/20230728JetJet/20230728_pythia8_JetJet_40-60GeV/Merged.root");
+    if(NormValue==5)jetFile = TFile::Open("/home/lmh/alice/fromPuhti/July2023/20230728JetJet/20230728_pythia8_JetJet_60-100GeV/Merged.root");
+    if(NormValue==6)jetFile = TFile::Open("/home/lmh/alice/fromPuhti/July2023/20230728JetJet/20230728_pythia8_JetJet_100-200GeV/Merged.root");
+    if(NormValue==7)jetFile = TFile::Open("/home/lmh/alice/fromPuhti/July2023/20230728JetJet/20230728_pythia8_JetJet_200-GeV/Merged.root");
 
     const Int_t nR = 3; 
     const Float_t Rvals[nR] = {0.2, 0.4, 0.6}; // Cone radii
     //const double EtaMin[2] = {3.4,3.9}; 
     //const double EtaMax[2] = {5.0,5.5};
-    
 
     const Float_t etaMin = 3.4; const Float_t etaMax = 5.5; //changed in June23, 3.4 to 5.5  
 
@@ -36,9 +33,9 @@ void JetPlottingMergedFractionsEight(int NormValue=0) //loops over R and saves t
     const double EtaBinBorders[nR][nEtaBins] = {{3.6,4.5,5.3},{3.8,4.5,5.1},{4.0,4.5,4.9}};
     TString etaRange[nEtaBins-1] = {"3.4+R < #eta_{jet} < 4.5","4.5 < #eta_{jet} < 5.5-R"}; //different range for R=0.6, 0.4, 0.2. 
     const Int_t nEBins  = 6;//16;
-    const Int_t npTBins  = 9;//16;
+    const Int_t npTBins  = 8;//16;
     const double JetEBorders[nEBins] = {100.0, 400.0, 800.0, 1200.0, 1600.0, 2000.0}; 
-    const double JetpTBorders[npTBins] = {5.0, 10.0, 20.0, 40.0, 60.0, 80.0, 100.0, 150.0, 200.0}; 
+    const double JetpTBorders[npTBins] = {5.0, 10.0, 20.0, 40.0, 60.0, 80.0, 100.0, 150.0};//, 200.0}; 
     const Int_t nConst = 5;
     const Int_t ConstVals[nConst] = {1, 2, 3, 5, 10}; // constituent values to check
 
@@ -51,14 +48,14 @@ void JetPlottingMergedFractionsEight(int NormValue=0) //loops over R and saves t
 
     int constMin = 0; //min number of constituents in matchd jet 1
 
-    if(NormValue==0)fout = new TFile("JetJetOutput/July2023/ptmin10/fractions/20230722_pythia8_JetJet_5-10GeV_Merged_Output.root", "RECREATE");
-    if(NormValue==1)fout = new TFile("JetJetOutput/July2023/ptmin10/fractions/20230722_pythia8_JetJet_10-20GeV_Merged_Output.root", "RECREATE");
-    if(NormValue==2)fout = new TFile("JetJetOutput/July2023/ptmin10/fractions/20230722_pythia8_JetJet_20-30GeV_Merged_Output.root", "RECREATE");
-    if(NormValue==3)fout = new TFile("JetJetOutput/July2023/ptmin10/fractions/20230722_pythia8_JetJet_30-40GeV_Merged_Output.root", "RECREATE");
-    if(NormValue==4)fout = new TFile("JetJetOutput/July2023/ptmin10/fractions/20230722_pythia8_JetJet_40-60GeV_Merged_Output.root", "RECREATE");
-    if(NormValue==5)fout = new TFile("JetJetOutput/July2023/ptmin10/fractions/20230722_pythia8_JetJet_60-100GeV_Merged_Output.root", "RECREATE");
-    if(NormValue==6)fout = new TFile("JetJetOutput/July2023/ptmin10/fractions/20230722_pythia8_JetJet_100-200GeV_Merged_Output.root", "RECREATE");
-    if(NormValue==7)fout = new TFile("JetJetOutput/July2023/ptmin10/fractions/20230722_pythia8_JetJet_200-GeV_Merged_Output.root", "RECREATE");
+    if(NormValue==0)fout = new TFile("Data20230728/FRAC/20230728_pythia8_JetJet_5-10GeV_Merged_TotalOutput.root", "RECREATE");
+    if(NormValue==1)fout = new TFile("Data20230728/FRAC/20230728_pythia8_JetJet_10-20GeV_Merged_TotalOutput.root", "RECREATE");
+    if(NormValue==2)fout = new TFile("Data20230728/FRAC/20230728_pythia8_JetJet_20-30GeV_Merged_TotalOutput.root", "RECREATE");
+    if(NormValue==3)fout = new TFile("Data20230728/FRAC/20230728_pythia8_JetJet_30-40GeV_Merged_TotalOutput.root", "RECREATE");
+    if(NormValue==4)fout = new TFile("Data20230728/FRAC/20230728_pythia8_JetJet_40-60GeV_Merged_TotalOutput.root", "RECREATE");
+    if(NormValue==5)fout = new TFile("Data20230728/FRAC/20230728_pythia8_JetJet_60-100GeV_Merged_TotalOutput.root", "RECREATE");
+    if(NormValue==6)fout = new TFile("Data20230728/FRAC/20230728_pythia8_JetJet_100-200GeV_Merged_TotalOutput.root", "RECREATE");
+    if(NormValue==7)fout = new TFile("Data20230728/FRAC/20230728_pythia8_JetJet_200-GeV_Merged_TotalOutput.root", "RECREATE");
 
     TTree *jetTree = (TTree *)jetFile->Get("jetTree");
     TTree *TruthjetTree = (TTree *)jetFile->Get("truthjetTree");
@@ -141,10 +138,10 @@ void JetPlottingMergedFractionsEight(int NormValue=0) //loops over R and saves t
 
         TruthjetTree->Draw(Form("truthjetNeutralEnergyFrac>>hPartNeutral_R%d", Rvalue), Form("truthjetR==%d && truthjetEta>=%f && truthjetEta<%f && jetParts_truth > %d", int(Rvals[Rvalue] * 10),etaMin+Rvals[Rvalue],etaMax-Rvals[Rvalue], constMin), "goff"); 
 
-        hDetECAL[Rvalue]->Scale(normalizations[NormValue]);
-        hPartNeutralMatch[Rvalue]->Scale(normalizations[NormValue]);
-        hDetECALAll[Rvalue]->Scale(normalizations[NormValue]);
-        hPartNeutral[Rvalue]->Scale(normalizations[NormValue]);
+        hDetECAL[Rvalue]->Scale(normalizations[NormValue]/500.0);
+        hPartNeutralMatch[Rvalue]->Scale(normalizations[NormValue]/500.0);
+        hDetECALAll[Rvalue]->Scale(normalizations[NormValue]/500.0);
+        hPartNeutral[Rvalue]->Scale(normalizations[NormValue]/500.0);
 
         for (int ieta = 0; ieta < nEtaBins-1; ++ieta)
         {
@@ -167,10 +164,10 @@ void JetPlottingMergedFractionsEight(int NormValue=0) //loops over R and saves t
             if(hDetECALAllEta[Rvalue][ieta]->GetEntries()==0) hDetECALAllEta[Rvalue][ieta]->Fill(-2);
             if(hPartNeutralEta[Rvalue][ieta]->GetEntries()==0) hPartNeutralEta[Rvalue][ieta]->Fill(-2);
 
-            hDetECALEta[Rvalue][ieta]->Scale(normalizations[NormValue]);
-            hPartNeutralMatchEta[Rvalue][ieta]->Scale(normalizations[NormValue]);
-            hDetECALAllEta[Rvalue][ieta]->Scale(normalizations[NormValue]);
-            hPartNeutralEta[Rvalue][ieta]->Scale(normalizations[NormValue]);
+            hDetECALEta[Rvalue][ieta]->Scale(normalizations[NormValue]/500.0);
+            hPartNeutralMatchEta[Rvalue][ieta]->Scale(normalizations[NormValue]/500.0);
+            hDetECALAllEta[Rvalue][ieta]->Scale(normalizations[NormValue]/500.0);
+            hPartNeutralEta[Rvalue][ieta]->Scale(normalizations[NormValue]/500.0);
 
             for (int iconst = 0; iconst < nConst; ++iconst)
             {
@@ -194,10 +191,10 @@ void JetPlottingMergedFractionsEight(int NormValue=0) //loops over R and saves t
                 if(hDetECALAllEtaConst[Rvalue][ieta][iconst]->GetEntries()==0) hDetECALAllEtaConst[Rvalue][ieta][iconst]->Fill(-2);
                 if(hPartNeutralEtaConst[Rvalue][ieta][iconst]->GetEntries()==0) hPartNeutralEtaConst[Rvalue][ieta][iconst]->Fill(-2);
 
-                hDetECALEtaConst[Rvalue][ieta][iconst]->Scale(normalizations[NormValue]);
-                hPartNeutralMatchEtaConst[Rvalue][ieta][iconst]->Scale(normalizations[NormValue]);
-                hDetECALAllEtaConst[Rvalue][ieta][iconst]->Scale(normalizations[NormValue]);
-                hPartNeutralEtaConst[Rvalue][ieta][iconst]->Scale(normalizations[NormValue]);
+                hDetECALEtaConst[Rvalue][ieta][iconst]->Scale(normalizations[NormValue]/500.0);
+                hPartNeutralMatchEtaConst[Rvalue][ieta][iconst]->Scale(normalizations[NormValue]/500.0);
+                hDetECALAllEtaConst[Rvalue][ieta][iconst]->Scale(normalizations[NormValue]/500.0);
+                hPartNeutralEtaConst[Rvalue][ieta][iconst]->Scale(normalizations[NormValue]/500.0);
             }
         }
 
@@ -227,10 +224,10 @@ void JetPlottingMergedFractionsEight(int NormValue=0) //loops over R and saves t
             if(hDetECALAllConst[Rvalue][iconst]->GetEntries()==0) hDetECALAllConst[Rvalue][iconst]->Fill(-2);
             if(hPartNeutralConst[Rvalue][iconst]->GetEntries()==0) hPartNeutralConst[Rvalue][iconst]->Fill(-2);
 
-            hDetECALConst[Rvalue][iconst]->Scale(normalizations[NormValue]);
-            hPartNeutralMatchConst[Rvalue][iconst]->Scale(normalizations[NormValue]);
-            hDetECALAllConst[Rvalue][iconst]->Scale(normalizations[NormValue]);
-            hPartNeutralConst[Rvalue][iconst]->Scale(normalizations[NormValue]);
+            hDetECALConst[Rvalue][iconst]->Scale(normalizations[NormValue]/500.0);
+            hPartNeutralMatchConst[Rvalue][iconst]->Scale(normalizations[NormValue]/500.0);
+            hDetECALAllConst[Rvalue][iconst]->Scale(normalizations[NormValue]/500.0);
+            hPartNeutralConst[Rvalue][iconst]->Scale(normalizations[NormValue]/500.0);
         }
 
         //energy loop
@@ -262,10 +259,10 @@ void JetPlottingMergedFractionsEight(int NormValue=0) //loops over R and saves t
             if(hDetECALAllE[iE][Rvalue]->GetEntries()==0) hDetECALAllE[iE][Rvalue]->Fill(-2);
             if(hPartNeutralE[iE][Rvalue]->GetEntries()==0) hPartNeutralE[iE][Rvalue]->Fill(-2);
 
-            hDetECALE[iE][Rvalue]->Scale(normalizations[NormValue]);
-            hPartNeutralMatchE[iE][Rvalue]->Scale(normalizations[NormValue]);
-            hDetECALAllE[iE][Rvalue]->Scale(normalizations[NormValue]);
-            hPartNeutralE[iE][Rvalue]->Scale(normalizations[NormValue]);
+            hDetECALE[iE][Rvalue]->Scale(normalizations[NormValue]/500.0);
+            hPartNeutralMatchE[iE][Rvalue]->Scale(normalizations[NormValue]/500.0);
+            hDetECALAllE[iE][Rvalue]->Scale(normalizations[NormValue]/500.0);
+            hPartNeutralE[iE][Rvalue]->Scale(normalizations[NormValue]/500.0);
 
             //eta loop here
             for (int ieta = 0; ieta < nEtaBins-1; ++ieta)
@@ -295,10 +292,10 @@ void JetPlottingMergedFractionsEight(int NormValue=0) //loops over R and saves t
                 if(hDetECALAllEEta[iE][Rvalue][ieta]->GetEntries()==0) hDetECALAllEEta[iE][Rvalue][ieta]->Fill(-2);
                 if(hPartNeutralEEta[iE][Rvalue][ieta]->GetEntries()==0) hPartNeutralEEta[iE][Rvalue][ieta]->Fill(-2);
 
-                hDetECALEEta[iE][Rvalue][ieta]->Scale(normalizations[NormValue]);
-                hPartNeutralMatchEEta[iE][Rvalue][ieta]->Scale(normalizations[NormValue]);
-                hDetECALAllEEta[iE][Rvalue][ieta]->Scale(normalizations[NormValue]);
-                hPartNeutralEEta[iE][Rvalue][ieta]->Scale(normalizations[NormValue]);
+                hDetECALEEta[iE][Rvalue][ieta]->Scale(normalizations[NormValue]/500.0);
+                hPartNeutralMatchEEta[iE][Rvalue][ieta]->Scale(normalizations[NormValue]/500.0);
+                hDetECALAllEEta[iE][Rvalue][ieta]->Scale(normalizations[NormValue]/500.0);
+                hPartNeutralEEta[iE][Rvalue][ieta]->Scale(normalizations[NormValue]/500.0);
 
 
             }
@@ -329,10 +326,10 @@ void JetPlottingMergedFractionsEight(int NormValue=0) //loops over R and saves t
                 if(hDetECALAllEConst[iE][Rvalue][iconst]->GetEntries()==0) hDetECALAllEConst[iE][Rvalue][iconst]->Fill(-2);
                 if(hPartNeutralEConst[iE][Rvalue][iconst]->GetEntries()==0) hPartNeutralEConst[iE][Rvalue][iconst]->Fill(-2);
 
-                hDetECALEConst[iE][Rvalue][iconst]->Scale(normalizations[NormValue]);
-                hPartNeutralMatchEConst[iE][Rvalue][iconst]->Scale(normalizations[NormValue]);
-                hDetECALAllEConst[iE][Rvalue][iconst]->Scale(normalizations[NormValue]);
-                hPartNeutralEConst[iE][Rvalue][iconst]->Scale(normalizations[NormValue]);
+                hDetECALEConst[iE][Rvalue][iconst]->Scale(normalizations[NormValue]/500.0);
+                hPartNeutralMatchEConst[iE][Rvalue][iconst]->Scale(normalizations[NormValue]/500.0);
+                hDetECALAllEConst[iE][Rvalue][iconst]->Scale(normalizations[NormValue]/500.0);
+                hPartNeutralEConst[iE][Rvalue][iconst]->Scale(normalizations[NormValue]/500.0);
             }
         }
 
@@ -363,10 +360,10 @@ void JetPlottingMergedFractionsEight(int NormValue=0) //loops over R and saves t
             if(hDetECALAllpT[ipT][Rvalue]->GetEntries()==0) hDetECALAllpT[ipT][Rvalue]->Fill(-2);
             if(hPartNeutralpT[ipT][Rvalue]->GetEntries()==0) hPartNeutralpT[ipT][Rvalue]->Fill(-2);
 
-            hDetECALpT[ipT][Rvalue]->Scale(normalizations[NormValue]);
-            hPartNeutralMatchpT[ipT][Rvalue]->Scale(normalizations[NormValue]);
-            hDetECALAllpT[ipT][Rvalue]->Scale(normalizations[NormValue]);
-            hPartNeutralpT[ipT][Rvalue]->Scale(normalizations[NormValue]);
+            hDetECALpT[ipT][Rvalue]->Scale(normalizations[NormValue]/500.0);
+            hPartNeutralMatchpT[ipT][Rvalue]->Scale(normalizations[NormValue]/500.0);
+            hDetECALAllpT[ipT][Rvalue]->Scale(normalizations[NormValue]/500.0);
+            hPartNeutralpT[ipT][Rvalue]->Scale(normalizations[NormValue]/500.0);
 
             //eta loop here
             for (int ieta = 0; ieta < nEtaBins-1; ++ieta)
@@ -389,17 +386,17 @@ void JetPlottingMergedFractionsEight(int NormValue=0) //loops over R and saves t
 
                 jetTree->Draw(Form("jetECALEnergyFrac>>hDetECALAllpT_%dEta_%d_R%d", ipT, ieta, Rvalue), Form("jetR==%d && jetpT>=%d  && jetpT<%d  && jetEta>=%f && jetEta<%f && jetParts > %d", int(Rvals[Rvalue] * 10), int(JetpTBorders[ipT]), int(JetpTBorders[ipT+1]), EtaBinBorders[Rvalue][ieta], EtaBinBorders[Rvalue][ieta+1], constMin), "goff");
 
-                TruthjetTree->Draw(Form("truthjetNeutralEnergyFrac>>hPartNeutralpT_%dEta_%d_R%d", ipT, ieta, Rvalue), Form("truthjetR==%d && truthjetE>=%d  && truthjetE<%d  && truthjetEta>=%f && truthjetEta<%f && jetParts_truth > %d", int(Rvals[Rvalue] * 10), int(JetpTBorders[ipT]), int(JetpTBorders[ipT+1]), EtaBinBorders[Rvalue][ieta], EtaBinBorders[Rvalue][ieta+1], constMin), "goff"); 
+                TruthjetTree->Draw(Form("truthjetNeutralEnergyFrac>>hPartNeutralpT_%dEta_%d_R%d", ipT, ieta, Rvalue), Form("truthjetR==%d && truthjetpT>=%d  && truthjetpT<%d  && truthjetEta>=%f && truthjetEta<%f && jetParts_truth > %d", int(Rvals[Rvalue] * 10), int(JetpTBorders[ipT]), int(JetpTBorders[ipT+1]), EtaBinBorders[Rvalue][ieta], EtaBinBorders[Rvalue][ieta+1], constMin), "goff"); 
 
                 if(hDetECALpTEta[ipT][Rvalue][ieta]->GetEntries()==0) hDetECALpTEta[ipT][Rvalue][ieta]->Fill(-2);
                 if(hPartNeutralMatchpTEta[ipT][Rvalue][ieta]->GetEntries()==0) hPartNeutralMatchpTEta[ipT][Rvalue][ieta]->Fill(-2);
                 if(hDetECALAllpTEta[ipT][Rvalue][ieta]->GetEntries()==0) hDetECALAllpTEta[ipT][Rvalue][ieta]->Fill(-2);
                 if(hPartNeutralpTEta[ipT][Rvalue][ieta]->GetEntries()==0) hPartNeutralpTEta[ipT][Rvalue][ieta]->Fill(-2);
 
-                hDetECALpTEta[ipT][Rvalue][ieta]->Scale(normalizations[NormValue]);
-                hPartNeutralMatchpTEta[ipT][Rvalue][ieta]->Scale(normalizations[NormValue]);
-                hDetECALAllpTEta[ipT][Rvalue][ieta]->Scale(normalizations[NormValue]);
-                hPartNeutralpTEta[ipT][Rvalue][ieta]->Scale(normalizations[NormValue]);
+                hDetECALpTEta[ipT][Rvalue][ieta]->Scale(normalizations[NormValue]/500.0);
+                hPartNeutralMatchpTEta[ipT][Rvalue][ieta]->Scale(normalizations[NormValue]/500.0);
+                hDetECALAllpTEta[ipT][Rvalue][ieta]->Scale(normalizations[NormValue]/500.0);
+                hPartNeutralpTEta[ipT][Rvalue][ieta]->Scale(normalizations[NormValue]/500.0);
             }
 
             for (int iconst = 0; iconst < nConst; ++iconst)
@@ -422,17 +419,17 @@ void JetPlottingMergedFractionsEight(int NormValue=0) //loops over R and saves t
 
                 jetTree->Draw(Form("jetECALEnergyFrac>>hDetECALAllpT_%dConst_%d_R%d", ipT, iconst, Rvalue), Form("jetR==%d && jetpT>=%d  && jetpT<%d  && jetEta>=%f && jetEta<%f && jetParts == %d", int(Rvals[Rvalue] * 10), int(JetpTBorders[ipT]), int(JetpTBorders[ipT+1]),etaMin+Rvals[Rvalue],etaMax-Rvals[Rvalue], ConstVals[iconst]), "goff");
 
-                TruthjetTree->Draw(Form("truthjetNeutralEnergyFrac>>hPartNeutralpT_%dConst_%d_R%d", ipT, iconst, Rvalue), Form("truthjetR==%d && truthjetE>=%d  && truthjetE<%d  && truthjetEta>=%f && truthjetEta<%f && jetParts_truth == %d", int(Rvals[Rvalue] * 10), int(JetpTBorders[ipT]), int(JetpTBorders[ipT+1]),etaMin+Rvals[Rvalue],etaMax-Rvals[Rvalue], ConstVals[iconst]), "goff"); 
+                TruthjetTree->Draw(Form("truthjetNeutralEnergyFrac>>hPartNeutralpT_%dConst_%d_R%d", ipT, iconst, Rvalue), Form("truthjetR==%d && truthjetpT>=%d  && truthjetpT<%d  && truthjetEta>=%f && truthjetEta<%f && jetParts_truth == %d", int(Rvals[Rvalue] * 10), int(JetpTBorders[ipT]), int(JetpTBorders[ipT+1]),etaMin+Rvals[Rvalue],etaMax-Rvals[Rvalue], ConstVals[iconst]), "goff"); 
 
                 if(hDetECALpTConst[ipT][Rvalue][iconst]->GetEntries()==0) hDetECALpTConst[ipT][Rvalue][iconst]->Fill(-2);
                 if(hPartNeutralMatchpTConst[ipT][Rvalue][iconst]->GetEntries()==0) hPartNeutralMatchpTConst[ipT][Rvalue][iconst]->Fill(-2);
                 if(hDetECALAllpTConst[ipT][Rvalue][iconst]->GetEntries()==0) hDetECALAllpTConst[ipT][Rvalue][iconst]->Fill(-2);
                 if(hPartNeutralpTConst[ipT][Rvalue][iconst]->GetEntries()==0) hPartNeutralpTConst[ipT][Rvalue][iconst]->Fill(-2);
 
-                hDetECALpTConst[ipT][Rvalue][iconst]->Scale(normalizations[NormValue]);
-                hPartNeutralMatchpTConst[ipT][Rvalue][iconst]->Scale(normalizations[NormValue]);
-                hDetECALAllpTConst[ipT][Rvalue][iconst]->Scale(normalizations[NormValue]);
-                hPartNeutralpTConst[ipT][Rvalue][iconst]->Scale(normalizations[NormValue]);
+                hDetECALpTConst[ipT][Rvalue][iconst]->Scale(normalizations[NormValue]/500.0);
+                hPartNeutralMatchpTConst[ipT][Rvalue][iconst]->Scale(normalizations[NormValue]/500.0);
+                hDetECALAllpTConst[ipT][Rvalue][iconst]->Scale(normalizations[NormValue]/500.0);
+                hPartNeutralpTConst[ipT][Rvalue][iconst]->Scale(normalizations[NormValue]/500.0);
             }
         }
     }

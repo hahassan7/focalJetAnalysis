@@ -19,36 +19,48 @@
 #include <TGraphAsymmErrors.h>
 #include "paperPlotsHeader.h"
 
-Double_t textSize = 0.045;
+Double_t textSize = 0.04;//5;
+
+//Macro to plot the energy binned JES and JER as well as response matrices and projections
+//Base macro provided to me by F. Bock
 
 void focalJetResolutionsEnergy( 
-                          TString inputfileR02 = "JetJetOutput/FINALAN/Merged20230417_0-1000GeV_OutputR6.root", 
-                          TString inputfileR04 = "JetJetOutput/FINALAN/Merged20230417_0-1000GeV_OutputR4.root"
+                          TString inputfileR02 = "Data20230728/JES/Merged_OutputR6.root", 
+                          TString inputfileR04 = "Data20230728/JES/Merged_OutputR6.root"
                         ){
     StyleSettingsPaper();
     TGaxis::SetMaxDigits(4);
 
-    Color_t colors[3]     = {kBlack,  kRed+1, kBlue+2};
-    Color_t colorsMC[3]   = {kGray+1, kRed+3, kBlue+3};
+    Int_t RMax = 1; //how many R values you want to draw
+    Int_t JESMinX = 200; //xmin for the jes and jer plots, also used for other E min
+    Int_t JESMaxX = 3050; //xmin for the jes and jer plots, also used for other E max
+
+    Color_t colors[3]     = {kBlue+2,  kRed+1, kBlack}; //kBlack,  kRed+1, kBlue+2
+    Color_t colorsMC[3]   = {kBlack,  kRed+1, kBlue+2};//{kBlue+2,  kRed+1, kBlack}; //{kGray+1, kRed+3, kBlue+3};
     Style_t marker[3]     = {20, 21, 33};
-    Style_t markerMC[3]   = {24, 25, 27};
+    Style_t markerMC[3]   = {33, 20, 21}; //24, 25, 27
     Style_t style[3]      =  {1, 5, 7};
-    Size_t  markerS[3]    = { 2, 2, 2.4};
+    Size_t  markerS[3]    = { 2, 2, 2}; //2.4
     
     TString radiusOut[2]    = {"R06", "R04"};
     TString radiusLabel[2]  = {"#it{R} = 0.6", "#it{R} = 0.4"};
-    TString etaOut[3]       = {"Full", "38to45", "45to51"};
-    TString etaRange[3]     = {"3.4+R < #eta_{jet} < 5.5-R", "3.8 < #eta_{jet} < 4.5", "4.5 < #eta_{jet} < 5.1"}; //{3.8, 4.6, 5.4}
-    Double_t rangeJES[2][2] = { {-0.7, -0.05}, {-0.7, 0.1} };
-    Int_t maxNEbins        = 15;
-    Int_t exampleBins[3]    = {1,2,3};
-    Double_t binningE[16]  = {0.0, 50.0, 100.0, 200.0, 300.0, 400.0, 500.0, 600.0, 700.0, 800.0, 900.0, 1000.0, 1250.0, 1500.0, 1750.0, 2000.0}; 
+    TString etaOut[3]       = {"Full", "40to45", "45to49"};
+    TString etaRange[3]     = {"4.0 < #eta_{jet} < 4.9", "4.0 < #eta_{jet} < 4.5", "4.5 < #eta_{jet} < 4.9"}; //{3.8, 4.5, 5.1}  = {"3.4+R < #eta_{jet} < 5.5-R", "4.0 < #eta_{jet} < 4.5", "4.5 < #eta_{jet} < 4.9"};
+    Double_t rangeJES[2][2] = { {-0.45, -0.05}, {-0.45, -0.05} };
+    const Int_t maxNEbins        = 14;
+    Int_t exampleBins[3]    = {7,9,11};
+    //Double_t binningE[16]  = {0.0, 50.0, 100.0, 200.0, 300.0, 400.0, 500.0, 600.0, 700.0, 800.0, 900.0, 1000.0, 1250.0, 1500.0, 1750.0, 2000.0}; 
+    Double_t binningE[15] = {100.0, 200.0, 300.0, 400.0, 500.0, 600.0, 700.0, 800.0, 900.0, 1000.0, 1250.0, 1500.0, 1750.0, 2000.0, 3000.0}; //const Int_t nEBins  = 15;
     
     TH2D* histResponseMat_E[2][3];
     TH1D* histMean_E[2][3];
     TH1D* histMedian_E[2][3];
     TH1D* histSigma_E[2][3];
-    TH1D* histDeltaE_bins[2][3][9];
+    TH1D* histDeltaE_bins[2][3][maxNEbins];
+
+    TH1D* hgausMeansE;
+    TH1D* hgausSDE;
+
     TFile* fileR02 = new TFile(inputfileR02.Data());
     for (Int_t i = 0; i < 3; i++){
       if (i == 0){
@@ -56,6 +68,8 @@ void focalJetResolutionsEnergy(
         histMean_E[0][i]         = (TH1D*)fileR02->Get("hMeanE");
         histMedian_E[0][i]       = (TH1D*)fileR02->Get("hMedianE");
         histSigma_E[0][i]        = (TH1D*)fileR02->Get("hSDE");
+        hgausMeansE               = (TH1D*)fileR02->Get("hgausMeansE");
+        hgausSDE                  = (TH1D*)fileR02->Get("hgausSDE");
         for (Int_t p = 0; p< maxNEbins; p++){
           histDeltaE_bins[0][i][p]   = (TH1D*)fileR02->Get(Form("hjetRatioE_%d", p));
           histDeltaE_bins[0][i][p]->Scale(histDeltaE_bins[0][i][p]->GetBinWidth(1));
@@ -73,7 +87,27 @@ void focalJetResolutionsEnergy(
         }
       }
       cout << "R = 0.2 \t" << histMean_E[0][i] << "\t"<<histSigma_E[0][i] << "\t"<<histResponseMat_E[0][i] << endl;
+      histResponseMat_E[0][i]->Rebin2D(9,15);
+      for(int enty = 1; enty <= histResponseMat_E[0][i]->GetNbinsY(); enty++){
+        Double_t sumX = 0.0;
+        for(int entx = 1; entx <= histResponseMat_E[0][i]->GetNbinsX(); entx++){
+          //sum all x
+          sumX += histResponseMat_E[0][i]->GetBinContent(histResponseMat_E[0][i]->GetBin(entx, enty));
+        }
+        for(int entx = 1; entx <= histResponseMat_E[0][i]->GetNbinsX(); entx++){
+          //normalize with sum
+          Double_t oldBin = histResponseMat_E[0][i]->GetBinContent(histResponseMat_E[0][i]->GetBin(entx, enty));
+          Double_t newBin = 0.0;
+          if(sumX != 0.0) {newBin = oldBin/sumX;
+          histResponseMat_E[0][i]->SetBinContent(entx, enty, newBin);}
+        }
+          cout << "sum = " << sumX << endl;
+      }
     }
+          cout << "nbins y  = " << histResponseMat_E[0][0]->GetNbinsY() << endl;
+          cout << "nbins x  =" <<  histResponseMat_E[0][0]->GetNbinsX() << endl;
+          cout << " y goes from" <<  histResponseMat_E[0][0]->GetYaxis()->GetBinCenter(1) <<" to " <<  histResponseMat_E[0][0]->GetYaxis()->GetBinCenter(histResponseMat_E[0][0]->GetNbinsY())<< endl;
+          cout << "x  goes from" <<  histResponseMat_E[0][0]->GetXaxis()->GetBinCenter(1) <<" to " <<  histResponseMat_E[0][0]->GetXaxis()->GetBinCenter(histResponseMat_E[0][0]->GetNbinsX())<< endl;
     
     TFile* fileR04 = new TFile(inputfileR04.Data());
     for (Int_t i = 0; i < 3; i++){
@@ -106,7 +140,7 @@ void focalJetResolutionsEnergy(
     DrawPaperCanvasSettings(cJES, 0.081, 0.01, 0.013, 0.099 );  
     cJES->cd();
     
-    TH2D* jesframe = new TH2D("jesframe", "", 5000, 100, 2002, 2000, -0.7, 0.2);
+    TH2D* jesframe = new TH2D("jesframe", "", 5000, JESMinX, JESMaxX, 2000, -0.7, 0.2);
     SetStyleHistoTH2ForGraphs(jesframe, "E_{part} (GeV)","JES", 0.85*textSize,textSize, 0.85*textSize,textSize, 0.92, 0.95, 510, 505, 42, 62);
 
 
@@ -114,15 +148,15 @@ void focalJetResolutionsEnergy(
     DrawPaperCanvasSettings(cJER, 0.081, 0.01, 0.013, 0.097 );  
     cJER->cd();
     
-    TH2D* jerframe = new TH2D("jerframe", "", 5000, 100, 2002, 2000, 0.0001, 0.4);
+    TH2D* jerframe = new TH2D("jerframe", "", 5000, JESMinX, JESMaxX, 2000, 0.045, 0.22);
     SetStyleHistoTH2ForGraphs(jerframe, "E_{part} (GeV)","JER", 0.85*textSize,textSize, 0.85*textSize,textSize, 0.92, 0.95, 510, 505, 42, 62);
 
-    for (Int_t r = 0; r < 2; r++){
+    for (Int_t r = 0; r < RMax; r++){
         cJES->Clear();
         jesframe->GetYaxis()->SetRangeUser(rangeJES[r][0], rangeJES[r][1]);
         jesframe->Draw("axis");
 
-        TLegend* leg2 = GetAndSetLegend2(0.1, 0.93-3*1.0*textSize, 0.3, 0.93, textSize, 1, "", 42, 0.35);     
+        TLegend* leg2 = GetAndSetLegend2(0.20, 0.93-3*1.0*textSize, 0.3, 0.93, textSize, 1, "", 42, 0.35);     
         for (Int_t e = 0; e < 3; e++){
             DrawSetMarker(histMean_E[r][e], marker[e], markerS[e], colors[e], colors[e]);
             histMean_E[r][e]->Draw("same");
@@ -136,7 +170,7 @@ void focalJetResolutionsEnergy(
         
         cJES->cd();
         cJES->Update();
-        cJES->SaveAs(Form("JES_%s.pdf", radiusOut[r].Data()));
+        cJES->SaveAs(Form("figs/Energy/JES_%s.pdf", radiusOut[r].Data()));
 
         cJER->Clear();
         jerframe->Draw("axis");
@@ -154,7 +188,7 @@ void focalJetResolutionsEnergy(
         
         cJER->cd();
         cJER->Update();
-        cJER->SaveAs(Form("JER_%s.pdf", radiusOut[r].Data()));
+        cJER->SaveAs(Form("figs/Energy/JER_%s.pdf", radiusOut[r].Data()));
     }
 
     for (Int_t e = 0; e < 3; e++){
@@ -162,41 +196,60 @@ void focalJetResolutionsEnergy(
         jesframe->GetYaxis()->SetRangeUser(rangeJES[0][0], rangeJES[1][1]);
         jesframe->Draw("axis");
 
-        TLegend* leg2 = GetAndSetLegend2(0.1, 0.93-2*1.0*textSize, 0.3, 0.93, textSize, 1, "", 42, 0.35);     
-        for (Int_t r = 0; r < 2; r++){
+        TLegend* leg2 = GetAndSetLegend2(0.20, 0.93-3*1.0*textSize, 0.3, 0.93, textSize, 1, "", 42, 0.35);     
+        for (Int_t r = 0; r < RMax; r++){
             if (r == 1) DrawSetMarker(histMean_E[r][e], marker[e], markerS[e], colors[e], colors[e]);
-            else        DrawSetMarker(histMean_E[r][e], markerMC[e], markerS[e]*1.2, colorsMC[e], colorsMC[e]);
+            else        {DrawSetMarker(histMean_E[r][e], markerMC[e], markerS[e]*1.2, colorsMC[e], colorsMC[e]);
+                        DrawSetMarker(histMedian_E[r][e], marker[e], markerS[e]*1.2, colors[e], colors[e]);
+                        DrawSetMarker(hgausMeansE, marker[e+1], markerS[e]*1.2, colors[e+1], colors[e+1]);
+            }
             histMean_E[r][e]->Draw("same");
-            leg2->AddEntry(histMean_E[r][e], radiusLabel[r].Data(), "p");
+            histMedian_E[r][e]->Draw("same");
+            hgausMeansE->Draw("same");
+            leg2->AddEntry(histMean_E[r][e], "mean", "p");//leg2->AddEntry(histMean_E[r][e], radiusLabel[r].Data(), "p");
+            leg2->AddEntry(histMedian_E[r][e], "median", "p");
+            leg2->AddEntry(hgausMeansE, "mean from Gaussian fit", "p");
         } 
         leg2->Draw("same");
         drawLatexAdd("ALICE simulation, pp #sqrt{#it{s}} = 14 TeV",0.95,0.965-1*1.1*textSize, textSize,kFALSE, kFALSE, kTRUE);  
         drawLatexAdd("FoCal upgrade",0.95,0.965-2*1.1*textSize, textSize,kFALSE, kFALSE, kTRUE);  
-        drawLatexAdd(Form("jets, anti-#it{k}_{T}, %s",etaRange[e].Data()),0.95,0.965-3*1.1*textSize, textSize,kFALSE, kFALSE, kTRUE);  
+        drawLatexAdd(Form("R=0.6 jets, anti-#it{k}_{T}, %s",etaRange[e].Data()),0.95,0.965-3*1.1*textSize, textSize,kFALSE, kFALSE, kTRUE);  
+        //drawLatexAdd("R=0.6",0.95,0.965-4.2*1.1*textSize, textSize,kFALSE, kFALSE, kTRUE);  
+        drawLatexAdd("#Delta E = (E_{part}-E_{part})/E_{part}",0.9,0.965-5.2*1.1*textSize, textSize,kFALSE, kFALSE, kTRUE);  
         jesframe->Draw("axis,same");
         
         cJES->cd();
         cJES->Update();
-        cJES->SaveAs(Form("JES_%s.pdf", etaOut[e].Data()));
+        auto fline = new TF1("fline", "0.0", 200, 3200);
+        fline->SetLineColor(kGray);
+        fline->SetLineStyle(2);
+        fline->Draw("same");
+        cJES->SaveAs(Form("figs/Energy/gausJES_%s.pdf", etaOut[e].Data()));
 
         cJER->Clear();
         jerframe->Draw("axis");
-        TLegend* leg3 = GetAndSetLegend2(0.82, 0.94-5*1.1*textSize, 0.96, 0.94-3*1.1*textSize, textSize, 1, "", 42, 0.3);     
-        for (Int_t r = 0; r < 2; r++){
+        TLegend* leg3 = GetAndSetLegend2(0.12, 0.99-4*1.1*textSize, 0.3, 0.99-1*1.1*textSize, textSize, 1, "", 42, 0.3); 
+        for (Int_t r = 0; r < RMax; r++){
             if (r == 1) DrawSetMarker(histSigma_E[r][e], marker[e], markerS[e], colors[e], colors[e]);
-            else        DrawSetMarker(histSigma_E[r][e], markerMC[e], markerS[e]*1.2, colorsMC[e], colorsMC[e]);
+            else        {DrawSetMarker(histSigma_E[r][e], markerMC[e], markerS[e]*1.2, colorsMC[e], colorsMC[e]);
+                        DrawSetMarker(hgausSDE, marker[e+1], markerS[e]*1.2, colors[e+1], colors[e+1]);
+                      }
             histSigma_E[r][e]->Draw("same");
-            leg3->AddEntry(histSigma_E[r][e], radiusLabel[r].Data(), "p");
+            hgausSDE->Draw("same");
+            //leg3->AddEntry((TObject*)0, radiusLabel[r].Data(), "");
+            leg3->AddEntry(histSigma_E[r][e], "standard deviation", "p");
+            leg3->AddEntry(hgausSDE, "standard deviation from Gaussian fit", "p");
         } 
         leg3->Draw("same");
         drawLatexAdd("ALICE simulation, pp #sqrt{#it{s}} = 14 TeV",0.95,0.965-1*1.1*textSize, textSize,kFALSE, kFALSE, kTRUE);  
         drawLatexAdd("FoCal upgrade",0.95,0.965-2*1.1*textSize, textSize,kFALSE, kFALSE, kTRUE);  
-        drawLatexAdd(Form("jets, anti-#it{k}_{T}, %s",etaRange[e].Data()),0.95,0.965-3*1.1*textSize, textSize,kFALSE, kFALSE, kTRUE);  
+        drawLatexAdd(Form("R=0.6 jets, anti-#it{k}_{T}, %s",etaRange[e].Data()),0.95,0.965-3*1.1*textSize, textSize,kFALSE, kFALSE, kTRUE);  
+        drawLatexAdd("#Delta E = (E_{part}-E_{part})/E_{part}",0.9,0.965-5.2*1.1*textSize, textSize,kFALSE, kFALSE, kTRUE);  
         jerframe->Draw("axis,same");
         
         cJER->cd();
         cJER->Update();
-        cJER->SaveAs(Form("JER_%s.pdf", etaOut[e].Data()));
+        cJER->SaveAs(Form("figs/Energy/gausJER_%s.pdf", etaOut[e].Data()));
     }
     
         // Style projection
@@ -205,27 +258,31 @@ void focalJetResolutionsEnergy(
     cCorr->SetLogz(1);
 
     for (Int_t e = 0; e < 3; e++){
-      for (Int_t r = 0; r < 2; r++){
+      for (Int_t r = 0; r < RMax; r++){
         cCorr->Clear();
-         SetStyleHistoTH2ForGraphs(histResponseMat_E[r][e], "E_{det} (GeV)", "E_{part} (GeV)", 0.85*textSize,textSize, 0.85*textSize,textSize, 0.95, 0.9, 510, 510, 42, 62);
+         SetStyleHistoTH2ForGraphs(histResponseMat_E[r][e], "E_{det} (GeV)", "E_{part} (GeV)", 0.75*textSize,textSize, 0.75*textSize,textSize, 0.95, 1.2, 510, 510, 42, 62);
          histResponseMat_E[r][e]->GetZaxis()->SetLabelSize( 0.85*textSize);
-         histResponseMat_E[r][e]->Rebin2D(6,6);
-         //histResponseMat_E[r][e]->GetZaxis()->SetRangeUser(0.001, 10);
-         histResponseMat_E[r][e]->GetXaxis()->SetRangeUser(0, 1300);
-         histResponseMat_E[r][e]->GetYaxis()->SetRangeUser(0, 1300);
+         //histResponseMat_E[r][e]->Rebin2D(6,6);
+         //histResponseMat_E[r][e]->GetZaxis()->SetRangeUser(0.000001, 10);
+         histResponseMat_E[r][e]->GetXaxis()->SetRangeUser(JESMinX, JESMaxX);
+         histResponseMat_E[r][e]->GetYaxis()->SetRangeUser(JESMinX, JESMaxX);
          histResponseMat_E[r][e]->Draw("colz");
+        auto fline = new TF1("fline", "x", JESMinX, JESMaxX);
+        fline->SetLineColor(kGray);
+        fline->SetLineStyle(2);
+        fline->Draw("same");
 
         drawLatexAdd("ALICE simulation, pp #sqrt{#it{s}} = 14 TeV",0.14,0.945-1*0.9*textSize, 0.85*textSize,kFALSE, kFALSE, kFALSE);  
         drawLatexAdd("FoCal upgrade",0.14,0.945-2*0.9*textSize, 0.85*textSize,kFALSE, kFALSE, kFALSE);  
         drawLatexAdd(Form("jets, anti-#it{k}_{T}, %s",radiusLabel[r].Data()),0.85,0.14+0.9*textSize, 0.85*textSize,kFALSE, kFALSE, kTRUE);  
         drawLatexAdd(Form("%s", etaRange[e].Data()),0.85,0.14, 0.85*textSize,kFALSE, kFALSE, kTRUE);  
         cCorr->Update();
-        cCorr->SaveAs(Form("ResponseMatrix_%s_%s.pdf",etaOut[e].Data(), radiusOut[r].Data()));
+        cCorr->SaveAs(Form("figs/Energy/ResponseMatrix_%s_%s.pdf",etaOut[e].Data(), radiusOut[r].Data()));
       }
     }
     
     
-    Double_t maxY   = 0.5;
+    Double_t maxY   = 0.25;
     Int_t yDivs     = 505;
     Double_t pixelX = 1400*2;
     Double_t pixelY = 500*2;
@@ -258,7 +315,7 @@ void focalJetResolutionsEnergy(
     ReturnCorrectValuesTextSize(   padLeft, textSizeLabels[2], textSizeFac[2], textSizeLabelsPixel, 0.08);
 
     
-    for (Int_t r = 0; r < 2; r++){
+    for (Int_t r = 0; r < RMax; r++){
       padRight->Draw();
       padMiddle->Draw();
       padLeft->Draw();
@@ -278,7 +335,7 @@ void focalJetResolutionsEnergy(
         
         drawLatexAdd("ALICE simulation",0.17,0.965-1*1.1*textSizeLabels[0], textSizeLabels[0],kFALSE, kFALSE, kFALSE);  
         drawLatexAdd("FoCal upgrade",0.17,0.965-2*1.1*textSizeLabels[0], textSizeLabels[0],kFALSE, kFALSE, kFALSE);  
-        drawLatexAdd("pp #sqrt{#it{s}} = 13 TeV",0.17,0.965-3*1.1*textSizeLabels[0], textSizeLabels[0],kFALSE, kFALSE, kFALSE);  
+        drawLatexAdd("pp #sqrt{#it{s}} = 14 TeV",0.17,0.965-3*1.1*textSizeLabels[0], textSizeLabels[0],kFALSE, kFALSE, kFALSE);  
         drawLatexAdd(Form("%.0f< #it{E}_{part}<%.0f GeV", binningE[exampleBins[0]], binningE[exampleBins[0]+1]),0.96,0.97-1*1.1*textSizeLabels[0], textSizeLabels[0],kFALSE, kFALSE, kTRUE);  
 
         DrawLines(0,0,0,0.05,2,kGray+2,7);
@@ -323,7 +380,7 @@ void focalJetResolutionsEnergy(
         
       cSlicesJES->cd();
       cSlicesJES->Update();
-      cSlicesJES->SaveAs(Form("JetEscaleProj_%s.pdf",radiusOut[r].Data()));
+      cSlicesJES->SaveAs(Form("figs/Energy/JetEscaleProj_%s.pdf",radiusOut[r].Data()));
     }
 
     for (Int_t e = 0; e < 3; e++){
@@ -339,7 +396,7 @@ void focalJetResolutionsEnergy(
       esframeR->GetYaxis()->SetTickLength(0.035);
       esframeR->Draw("axis");
 
-        for (Int_t r = 0; r < 2; r++){
+        for (Int_t r = 0; r < RMax; r++){
             if (r == 1)   DrawSetMarker(histDeltaE_bins[r][e][exampleBins[0]], marker[e], markerS[e]*1.5, colors[e], colors[e]);
             else          DrawSetMarker(histDeltaE_bins[r][e][exampleBins[0]], markerMC[e], markerS[e]*1.9, colorsMC[e], colorsMC[e]);
             histDeltaE_bins[r][e][exampleBins[0]]->Draw("same");
@@ -347,7 +404,7 @@ void focalJetResolutionsEnergy(
         
         drawLatexAdd("ALICE simulation",0.17,0.965-1*1.1*textSizeLabels[0], textSizeLabels[0],kFALSE, kFALSE, kFALSE);  
         drawLatexAdd("FoCal upgrade",0.17,0.965-2*1.1*textSizeLabels[0], textSizeLabels[0],kFALSE, kFALSE, kFALSE);  
-        drawLatexAdd("pp #sqrt{#it{s}} = 13 TeV",0.17,0.965-3*1.1*textSizeLabels[0], textSizeLabels[0],kFALSE, kFALSE, kFALSE);  
+        drawLatexAdd("pp #sqrt{#it{s}} = 14 TeV",0.17,0.965-3*1.1*textSizeLabels[0], textSizeLabels[0],kFALSE, kFALSE, kFALSE);  
         drawLatexAdd(Form("%.0f< E<%.0f GeV", binningE[exampleBins[0]], binningE[exampleBins[0]+1]),0.96,0.97-1*1.1*textSizeLabels[0], textSizeLabels[0],kFALSE, kFALSE, kTRUE);  
 
         DrawLines(0,0,0,0.05,2,kGray+2,7);
@@ -362,7 +419,7 @@ void focalJetResolutionsEnergy(
 
         
           TLegend* leg2 = GetAndSetLegend2(0.03, 0.945-2*1.*textSizeLabels[1], 0.4, 0.945, textSizeLabels[1], 1, "", 42, 0.35);     
-          for (Int_t r = 0; r < 2; r++){
+          for (Int_t r = 0; r < RMax; r++){
             if (r == 1)   DrawSetMarker(histDeltaE_bins[r][e][exampleBins[1]], marker[e], markerS[e]*1.5, colors[e], colors[e]);
             else          DrawSetMarker(histDeltaE_bins[r][e][exampleBins[1]], markerMC[e], markerS[e]*1.9, colorsMC[e], colorsMC[e]);
             histDeltaE_bins[r][e][exampleBins[1]]->Draw("same");
@@ -381,7 +438,7 @@ void focalJetResolutionsEnergy(
         esframeL->GetXaxis()->SetLabelOffset(-0.001);
         esframeL->Draw("axis");
       
-        for (Int_t r = 0; r < 2; r++){
+        for (Int_t r = 0; r < RMax; r++){
             if (r == 1)   DrawSetMarker(histDeltaE_bins[r][e][exampleBins[2]], marker[e], markerS[e]*1.5, colors[e], colors[e]);
             else          DrawSetMarker(histDeltaE_bins[r][e][exampleBins[2]], markerMC[e], markerS[e]*1.9, colorsMC[e], colorsMC[e]);
 
@@ -396,7 +453,7 @@ void focalJetResolutionsEnergy(
         
       cSlicesJES->cd();
       cSlicesJES->Update();
-      cSlicesJES->SaveAs(Form("JetEscaleProj_%s.pdf",etaOut[e].Data()));
+      cSlicesJES->SaveAs(Form("figs/Energy/JetEscaleProj_%s.pdf",etaOut[e].Data()));
     }
     
     

@@ -78,54 +78,54 @@ void chatGPTFillHistosPartLevel(Int_t NormValue = 0) { //matched particle level 
         // Initialize hist_pT_R[3] histograms
         hist_pT_R[R] = new TH1F(Form("hist_pT_R%d", R), Form("pT Distribution for particle jets, R = %0.1f; pT [GeV/c]; Entries", Rvals[R]), nBinspT, ptmin, ptmax);
         tree->Draw(Form("jetpT_match >> hist_pT_R%d", R), Form("jetR == %d && jetEta_match>=%f && jetEta_match<%f", int(Rvals[R] * 10), EtaMin[0]+Rvals[R], EtaMax[1]-Rvals[R]));
-        hist_pT_R[R]->Scale(normalizations[NormValue]);
+        hist_pT_R[R]->Scale(normalizations[NormValue]/500.0);
 
         // Initialize hist_E_R[3] histograms
         hist_E_R[R] = new TH1F(Form("hist_E_R%d", R), Form("E Distribution for particle jets, R = %0.1f; E [GeV]; Entries", Rvals[R]), nBinsE, emin, emax);
         tree->Draw(Form("jetE_match >> hist_E_R%d", R), Form("jetR == %d && jetEta_match>=%f && jetEta_match<%f", int(Rvals[R] * 10), EtaMin[0]+Rvals[R], EtaMax[1]-Rvals[R]));
-        hist_E_R[R]->Scale(normalizations[NormValue]);
+        hist_E_R[R]->Scale(normalizations[NormValue]/500.0);
 
         // Initialize hist_con_R[3] histograms
         hist_con_R[R] = new TH1F(Form("hist_con_R%d", R), Form("Constituent Distribution for particle jets, R = %0.1f; Constituent; Entries", Rvals[R]), nBinspTCon, cmin, cmax);
         tree->Draw(Form("jetParts_match>> hist_con_R%d", R), Form("jetR == %d && jetEta_match>=%f && jetEta_match<%f", int(Rvals[R] * 10), EtaMin[0]+Rvals[R], EtaMax[1]-Rvals[R]));
-        hist_con_R[R]->Scale(normalizations[NormValue]);
+        hist_con_R[R]->Scale(normalizations[NormValue]/500.0);
 
         for (int e = 0; e < 2; ++e) {
             // Initialize hist_pT_R_e[3][3] histograms
             hist_pT_R_e[R][e] = new TH1F(Form("hist_pT_R%d_e%d", R, e), Form("pT Distribution for particle jets, R = %0.1f, %s; pT [GeV/c]; Entries", Rvals[R], etaRange[e].Data()), nBinspT, ptmin, ptmax);
             tree->Draw(Form("jetpT_match >> hist_pT_R%d_e%d", R, e), Form("jetR == %d && jetEta_match>=%f && jetEta_match<%f", int(Rvals[R] * 10), EtaBinBorders[R][e], EtaBinBorders[R][e+1]));
-            hist_pT_R_e[R][e]->Scale(normalizations[NormValue]);
+            hist_pT_R_e[R][e]->Scale(normalizations[NormValue]/500.0);
 
             // Initialize hist_E_R_e[3][3] histograms
             hist_E_R_e[R][e] = new TH1F(Form("hist_E_R%d_e%d", R, e), Form("E Distribution for particle jets, R = %0.1f, %s; E [GeV]; Entries", Rvals[R], etaRange[e].Data()), nBinsE, emin, emax);
             tree->Draw(Form("jetE_match >> hist_E_R%d_e%d", R, e), Form("jetR == %d && jetEta_match>=%f && jetEta_match<%f", int(Rvals[R] * 10), EtaBinBorders[R][e], EtaBinBorders[R][e+1]));
-            hist_E_R_e[R][e]->Scale(normalizations[NormValue]);
+            hist_E_R_e[R][e]->Scale(normalizations[NormValue]/500.0);
 
             // Initialize hist_con_R_e[3][3] histograms
             hist_con_R_e[R][e] = new TH1F(Form("hist_con_R%d_e%d", R, e), Form("Constituent Distribution for particle jets, R = %0.1f, %s; Constituent; Entries", Rvals[R], etaRange[e].Data()), nBinspTCon, cmin, cmax);
             tree->Draw(Form("jetParts_match>> hist_con_R%d_e%d", R, e), Form("jetR == %d && jetEta_match>=%f && jetEta_match<%f", int(Rvals[R] * 10), EtaBinBorders[R][e], EtaBinBorders[R][e+1]));
-            hist_con_R_e[R][e]->Scale(normalizations[NormValue]);
+            hist_con_R_e[R][e]->Scale(normalizations[NormValue]/500.0);
 
         //ADD LOOP over the constituent numbers chosen (5) and fill the final histos!
             for (int c = 0; c < 5; ++c) {
                 hist_pTvscon_R_e[R][e][c] = new TH1F(Form("hist_pTvscon_R%d_e%d_c%d", R, e, c), Form("Constituent N = %d Distribution for particle jets, R = %0.1f, %s; pT [GeV/c]; Entries", ConstVals[c], Rvals[R], etaRange[e].Data()), nBinspT, ptmin, ptmax);
                 tree->Draw(Form("jetpT_match >> hist_pTvscon_R%d_e%d_c%d", R, e, c), Form("jetR == %d && jetEta_match>=%f && jetEta_match<%f && jetParts_match== %d", int(Rvals[R] * 10), EtaBinBorders[R][e], EtaBinBorders[R][e+1], ConstVals[c]));
-                hist_pTvscon_R_e[R][e][c]->Scale(normalizations[NormValue]);
+                hist_pTvscon_R_e[R][e][c]->Scale(normalizations[NormValue]/500.0);
 
                 hist_Evscon_R_e[R][e][c] = new TH1F(Form("hist_Evscon_R%d_e%d_c%d", R, e, c), Form("Constituent N = %d Distribution for particle jets, R = %0.1f, %s; E [GeV]; Entries", ConstVals[c], Rvals[R], etaRange[e].Data()), nBinsE, emin, emax);
                 tree->Draw(Form("jetE_match >> hist_Evscon_R%d_e%d_c%d", R, e, c), Form("jetR == %d && jetEta_match>=%f && jetEta_match<%f && jetParts_match== %d", int(Rvals[R] * 10), EtaBinBorders[R][e], EtaBinBorders[R][e+1], ConstVals[c]));
-                hist_Evscon_R_e[R][e][c]->Scale(normalizations[NormValue]);
+                hist_Evscon_R_e[R][e][c]->Scale(normalizations[NormValue]/500.0);
             }
 
         }
         for (int c = 0; c < 5; ++c) {
             hist_pTvscon_R[R][c] = new TH1F(Form("hist_pTvscon_R%d_c%d", R, c), Form("Constituent N = %d Distribution for particle jets, R = %0.1f; pT [GeV/c]; Entries", ConstVals[c], Rvals[R]), nBinspT, ptmin, ptmax);
             tree->Draw(Form("jetpT_match >> hist_pTvscon_R%d_c%d", R, c), Form("jetR == %d && jetEta_match>=%f && jetEta_match<%f && jetParts_match== %d", int(Rvals[R] * 10), EtaMin[0]+Rvals[R], EtaMax[1]-Rvals[R], ConstVals[c]));
-            hist_pTvscon_R[R][c]->Scale(normalizations[NormValue]);
+            hist_pTvscon_R[R][c]->Scale(normalizations[NormValue]/500.0);
 
             hist_Evscon_R[R][c] = new TH1F(Form("hist_Evscon_R%d_c%d", R, c), Form("Constituent N = %d Distribution for particle jets, R = %0.1f; E [GeV]; Entries", ConstVals[c], Rvals[R]), nBinsE, emin, emax);
             tree->Draw(Form("jetE_match >> hist_Evscon_R%d_c%d", R, c), Form("jetR == %d && jetEta_match>=%f && jetEta_match<%f && jetParts_match== %d", int(Rvals[R] * 10), EtaMin[0]+Rvals[R], EtaMax[1]-Rvals[R], ConstVals[c]));
-            hist_Evscon_R[R][c]->Scale(normalizations[NormValue]);
+            hist_Evscon_R[R][c]->Scale(normalizations[NormValue]/500.0);
         }
     }
 

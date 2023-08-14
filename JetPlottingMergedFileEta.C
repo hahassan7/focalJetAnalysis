@@ -17,7 +17,7 @@ void JetPlottingMergedFileEta(int Rvalue = 0)
     const Int_t nR = 3; //5
     const Float_t Rvals[nR] = {0.2, 0.4, 0.6};
 
-    TFile *jetFile = TFile::Open(Form("JetJetOutput/FINALAN/oneETAMergedR%d.root", int(Rvals[Rvalue] * 10)));
+    TFile *jetFile = TFile::Open(Form("JetJetOutput/July2023/ptmin10/JES/MergedR%d.root", int(Rvals[Rvalue] * 10)));
 
     TTree *jetTree = (TTree *)jetFile->Get("jetTree");
     TTree *TruthjetTree = (TTree *)jetFile->Get("truthjetTree");
@@ -31,14 +31,18 @@ void JetPlottingMergedFileEta(int Rvalue = 0)
 
     const Int_t nPtBins = 7; 
     const Int_t nEBins  = 6;
-    const Int_t nEtaBins  = 10;
-    //const double JetPtBorders[nPtBins] = {2.0, 5.0, 10.0, 15.0, 20.0, 25.0, 30.0, 35.0, 40.0, 70.0};
-    //const double JetPtBorders[nPtBins] = {2.0, 10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 80.0, 100.0, 400.0}; //setting new bins for largest pt binned pythia data
     const double JetPtBorders[nPtBins] = {0.0, 20.0, 40.0, 60.0, 80.0, 100.0, 400.0}; 
     //const double JetPtBorders[nPtBins] = {0.0, 10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 70.0, 80.0, 90.0, 100.0, 400.0}; 
     const double JetEBorders[nEBins] = {0.0, 400.0, 800.0, 1200.0, 1600.0, 2000.0}; 
+
+    const Int_t nEtaBins  = 4;//10;
+    //const double JetPtBorders[nPtBins] = {2.0, 5.0, 10.0, 15.0, 20.0, 25.0, 30.0, 35.0, 40.0, 70.0};
+    //const double JetPtBorders[nPtBins] = {2.0, 10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 80.0, 100.0, 400.0}; //setting new bins for largest pt binned pythia data
+    //const double JetPtBorders[nPtBins] = {0.0, 20.0, 40.0, 60.0, 80.0, 100.0, 400.0}; 
+    //const double JetPtBorders[nPtBins] = {0.0, 10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 70.0, 80.0, 90.0, 100.0, 400.0}; 
+    //const double JetEBorders[nEBins] = {0.0, 400.0, 800.0, 1200.0, 1600.0, 2000.0}; 
     //const double JetEBorders[nEBins] = {0.0, 200.0, 400.0, 600.0, 800.0, 1000.0, 1200.0, 1400.0, 1600.0, 1800.0, 2000.0}; 
-    const double EtaBinBorders[nEtaBins] = {3.6, 3.8, 4.0, 4.2, 4.4, 4.6, 4.8, 5.0, 5.2, 5.4}; //
+    const double EtaBinBorders[nEtaBins] = {3.8, 4.2, 4.6, 5.1};//{3.6, 3.8, 4.0, 4.2, 4.4, 4.6, 4.8, 5.0, 5.2, 5.4}; //[3.8, 4.2, 4.6, 5.1]
 
     double medianspT[nEtaBins];
     double meanspT[nEtaBins];
@@ -54,7 +58,7 @@ void JetPlottingMergedFileEta(int Rvalue = 0)
     double EtaSDpT[nEtaBins][nPtBins];
     double EtaSDE[nEtaBins][nEBins];
 
-    TFile *fout = new TFile(Form("JetJetOutput/FINALAN/oneETAMerged20230417_0-1000GeV_OutputR%d.root", int(Rvals[Rvalue] * 10)), "RECREATE");
+    TFile *fout = new TFile(Form("JetJetOutput/July2023/ptmin10/JES/Merged_OutputR%d.root", int(Rvals[Rvalue] * 10)), "RECREATE");
     //histograms
 
     TH1D *hjetRatiopT_Eta[nEtaBins][nPtBins];

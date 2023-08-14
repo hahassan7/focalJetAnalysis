@@ -10,30 +10,35 @@ double GetMedian( TH1D * h);
 
 void JetPlottingMergedEta(int NormValue=0,int Rvalue=0)
 {   
-    const int nNorm = 5;
-    const Float_t normalizations[nNorm] = {2.21064, 0.0669805, 0.00182628, 0.000139462, 0.0000225822};
+    const int nNorm = 8;
+    const Float_t normalizations[nNorm] = {0.0610658,0.00716477,0.000557627,0.000107816,4.31694e-05,9.62255e-06,1.24904e-06,5.99517e-08};
 
     //int NormValue = 0;
 
     TFile *jetFile;
-    if(NormValue==0)jetFile = TFile::Open("/home/lmh/alice/fromPuhti/April2023/pTmin2_20230417_pythia8_JetJet_0-5GeV/Merged.root");
-    if(NormValue==1)jetFile = TFile::Open("/home/lmh/alice/fromPuhti/April2023/pTmin2_20230417_pythia8_JetJet_5-15GeV/Merged.root");
-    if(NormValue==2)jetFile = TFile::Open("/home/lmh/alice/fromPuhti/April2023/pTmin2_20230417_pythia8_JetJet_15-30GeV/Merged.root");
-    if(NormValue==3)jetFile = TFile::Open("/home/lmh/alice/fromPuhti/April2023/pTmin2_20230417_pythia8_JetJet_30-50GeV/Merged.root");
-    if(NormValue==4)jetFile = TFile::Open("/home/lmh/alice/fromPuhti/April2023/pTmin2_20230417_pythia8_JetJet_50-1000GeV/Merged.root");
-    //TFile *jetFile = TFile::Open("JetJetOutput/MergedData/20230417_Merged/Merged.root");
+    if(NormValue==0)jetFile = TFile::Open("/home/lmh/alice/fromPuhti/July2023/ptmin10/data/ptmin10_20230722_pythia8_JetJet_5-10GeV/Merged.root");
+    if(NormValue==1)jetFile = TFile::Open("/home/lmh/alice/fromPuhti/July2023/ptmin10/data/ptmin10_20230722_pythia8_JetJet_10-20GeV/Merged.root");
+    if(NormValue==2)jetFile = TFile::Open("/home/lmh/alice/fromPuhti/July2023/ptmin10/data/ptmin10_20230722_pythia8_JetJet_20-30GeV/Merged.root");
+    if(NormValue==3)jetFile = TFile::Open("/home/lmh/alice/fromPuhti/July2023/ptmin10/data/ptmin10_20230722_pythia8_JetJet_30-40GeV/Merged.root");
+    if(NormValue==4)jetFile = TFile::Open("/home/lmh/alice/fromPuhti/July2023/ptmin10/data/ptmin10_20230722_pythia8_JetJet_40-60GeV/Merged.root");
+    if(NormValue==5)jetFile = TFile::Open("/home/lmh/alice/fromPuhti/July2023/ptmin10/data/ptmin10_20230722_pythia8_JetJet_60-100GeV/Merged.root");
+    if(NormValue==6)jetFile = TFile::Open("/home/lmh/alice/fromPuhti/July2023/ptmin10/data/ptmin10_20230722_pythia8_JetJet_100-200GeV/Merged.root");
+    if(NormValue==7)jetFile = TFile::Open("/home/lmh/alice/fromPuhti/July2023/ptmin10/data/ptmin10_20230722_pythia8_JetJet_200-GeV/Merged.root");
 
     const Int_t nR = 3; //5
     const Float_t Rvals[nR] = {0.2, 0.4, 0.6};//{0.2, 0.3, 0.4, 0.5, 0.6}; // Cone radii
     //int Rvalue = 0; // choose the index of the jet R you want to draw the main histos for !
-    int constMin = 0; //min number 2 of constituents in matchd jet
-
+    int constMin = 0; //min number of constituents in matchd jet 1
+    
     TFile *fout;
-    if(NormValue==0)fout = new TFile(Form("JetJetOutput/FINALAN/oneETA20230417_0-5GeV_Merged_OutputR%d.root", int(Rvals[Rvalue] * 10)), "RECREATE");
-    if(NormValue==1)fout = new TFile(Form("JetJetOutput/FINALAN/oneETA20230417_5-15GeV_Merged_OutputR%d.root", int(Rvals[Rvalue] * 10)), "RECREATE");
-    if(NormValue==2)fout = new TFile(Form("JetJetOutput/FINALAN/oneETA20230417_15-30GeV_Merged_OutputR%d.root", int(Rvals[Rvalue] * 10)), "RECREATE");
-    if(NormValue==3)fout = new TFile(Form("JetJetOutput/FINALAN/oneETA20230417_30-50GeV_Merged_OutputR%d.root", int(Rvals[Rvalue] * 10)), "RECREATE");
-    if(NormValue==4)fout = new TFile(Form("JetJetOutput/FINALAN/oneETA20230417_50-1000GeV_Merged_OutputR%d.root", int(Rvals[Rvalue] * 10)), "RECREATE");
+    if(NormValue==0)fout = new TFile(Form("Data20230728/JESEta/20230722_pythia8_JetJet_5-10GeV_Merged_OutputR%d.root", int(Rvals[Rvalue] * 10)), "RECREATE");
+    if(NormValue==1)fout = new TFile(Form("Data20230728/JESEta/20230722_pythia8_JetJet_10-20GeV_Merged_OutputR%d.root", int(Rvals[Rvalue] * 10)), "RECREATE");
+    if(NormValue==2)fout = new TFile(Form("Data20230728/JESEta/20230722_pythia8_JetJet_20-30GeV_Merged_OutputR%d.root", int(Rvals[Rvalue] * 10)), "RECREATE");
+    if(NormValue==3)fout = new TFile(Form("Data20230728/JESEta/20230722_pythia8_JetJet_30-40GeV_Merged_OutputR%d.root", int(Rvals[Rvalue] * 10)), "RECREATE");
+    if(NormValue==4)fout = new TFile(Form("Data20230728/JESEta/20230722_pythia8_JetJet_40-60GeV_Merged_OutputR%d.root", int(Rvals[Rvalue] * 10)), "RECREATE");
+    if(NormValue==5)fout = new TFile(Form("Data20230728/JESEta/20230722_pythia8_JetJet_60-100GeV_Merged_OutputR%d.root", int(Rvals[Rvalue] * 10)), "RECREATE");
+    if(NormValue==6)fout = new TFile(Form("Data20230728/JESEta/20230722_pythia8_JetJet_100-200GeV_Merged_OutputR%d.root", int(Rvals[Rvalue] * 10)), "RECREATE");
+    if(NormValue==7)fout = new TFile(Form("Data20230728/JESEta/20230722_pythia8_JetJet_200-GeV_Merged_OutputR%d.root", int(Rvals[Rvalue] * 10)), "RECREATE");
 
     TTree *jetTree = (TTree *)jetFile->Get("jetTree");
     TTree *TruthjetTree = (TTree *)jetFile->Get("truthjetTree");
@@ -46,14 +51,18 @@ void JetPlottingMergedEta(int NormValue=0,int Rvalue=0)
 
     const Int_t nPtBins = 7; 
     const Int_t nEBins  = 6;
-    const Int_t nEtaBins  = 10;
-    //const double JetPtBorders[nPtBins] = {2.0, 5.0, 10.0, 15.0, 20.0, 25.0, 30.0, 35.0, 40.0, 70.0};
-    //const double JetPtBorders[nPtBins] = {2.0, 10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 80.0, 100.0, 400.0}; //setting new bins for largest pt binned pythia data
     const double JetPtBorders[nPtBins] = {0.0, 20.0, 40.0, 60.0, 80.0, 100.0, 400.0}; 
     //const double JetPtBorders[nPtBins] = {0.0, 10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 70.0, 80.0, 90.0, 100.0, 400.0}; 
     const double JetEBorders[nEBins] = {0.0, 400.0, 800.0, 1200.0, 1600.0, 2000.0}; 
+
+    const Int_t nEtaBins  = 4;//10;
+    //const double JetPtBorders[nPtBins] = {2.0, 5.0, 10.0, 15.0, 20.0, 25.0, 30.0, 35.0, 40.0, 70.0};
+    //const double JetPtBorders[nPtBins] = {2.0, 10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 80.0, 100.0, 400.0}; //setting new bins for largest pt binned pythia data
+    //const double JetPtBorders[nPtBins] = {0.0, 20.0, 40.0, 60.0, 80.0, 100.0, 400.0}; 
+    //const double JetPtBorders[nPtBins] = {0.0, 10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 70.0, 80.0, 90.0, 100.0, 400.0}; 
+    //const double JetEBorders[nEBins] = {0.0, 400.0, 800.0, 1200.0, 1600.0, 2000.0}; 
     //const double JetEBorders[nEBins] = {0.0, 200.0, 400.0, 600.0, 800.0, 1000.0, 1200.0, 1400.0, 1600.0, 1800.0, 2000.0}; 
-    const double EtaBinBorders[nEtaBins] = {3.6, 3.8, 4.0, 4.2, 4.4, 4.6, 4.8, 5.0, 5.2, 5.4}; //
+    const double EtaBinBorders[nEtaBins] = {3.8, 4.2, 4.6, 5.1};//{3.6, 3.8, 4.0, 4.2, 4.4, 4.6, 4.8, 5.0, 5.2, 5.4}; //[3.8, 4.2, 4.6, 5.1]
 
     double medianspT[nEtaBins];
     double meanspT[nEtaBins];
@@ -86,10 +95,10 @@ void JetPlottingMergedEta(int NormValue=0,int Rvalue=0)
     jetTree->Draw("(jetpT-jetpT_match)/jetpT_match:jetEta>>hRespMatrix_pT", Form("jetR==%d && jetEta>%f && jetEta<%f && jetEta_match>%f && jetEta_match<%f && jet_distmatch<%f && jetParts_match > %d", int(Rvals[Rvalue] * 10), etaMin+Rvals[Rvalue], etaMax-Rvals[Rvalue], etaMin+Rvals[Rvalue], etaMax-Rvals[Rvalue], Rvals[Rvalue]*0.6, constMin), "goff");
     jetTree->Draw("(jetE-jetE_match)/jetE_match:jetEta>>hRespMatrix_E", Form("jetR==%d && jetEta>%f && jetEta<%f && jetEta_match>%f && jetEta_match<%f && jet_distmatch<%f && jetParts_match > %d", int(Rvals[Rvalue] * 10), etaMin+Rvals[Rvalue], etaMax-Rvals[Rvalue], etaMin+Rvals[Rvalue], etaMax-Rvals[Rvalue], Rvals[Rvalue]*0.6, constMin), "goff");
 
-    hRespMatrix_E->Scale(normalizations[NormValue]);
+    hRespMatrix_E->Scale(normalizations[NormValue]/500.0);
     //hRespMatrix_E->Scale(1./hRespMatrix_E->GetEntries(), "width");
     
-    hRespMatrix_pT->Scale(normalizations[NormValue]);
+    hRespMatrix_pT->Scale(normalizations[NormValue]/500.0);
     //hRespMatrix_pT->Scale(1./hRespMatrix_pT->GetEntries(), "width");
 
     for (int iE = 0; iE < nEtaBins-1; ++iE) //eta loop
@@ -105,13 +114,13 @@ void JetPlottingMergedEta(int NormValue=0,int Rvalue=0)
     for (int ipt = 0; ipt < nPtBins-1; ++ipt) {
         hRespMatrix_pT_many[ipt] = new TH2D(Form("hRespMatrix_pT%d", ipt), Form("#Delta p_{T}, p_{T}: %d - %d GeV/c, R=%0.1f;#eta_{jet};#Delta p_{T}",int(JetPtBorders[ipt]), int(JetPtBorders[ipt+1]), Rvals[Rvalue]), 150, etaMin, etaMax, 50, -1.0, 1.0);
         jetTree->Draw(Form("(jetpT-jetpT_match)/jetpT_match:jetEta>>hRespMatrix_pT%d", ipt), Form("jetR==%d && jetpT_match>=%d && jetpT_match<%d && jetEta>%f && jetEta<%f && jetEta_match>%f && jetEta_match<%f && jet_distmatch<%f && jetParts_match > %d", int(Rvals[Rvalue] * 10), int(JetPtBorders[ipt]), int(JetPtBorders[ipt+1]), etaMin+Rvals[Rvalue], etaMax-Rvals[Rvalue], etaMin+Rvals[Rvalue], etaMax-Rvals[Rvalue], Rvals[Rvalue]*0.6, constMin), "goff");
-        hRespMatrix_pT_many[ipt]->Scale(normalizations[NormValue]);
+        hRespMatrix_pT_many[ipt]->Scale(normalizations[NormValue]/500.0);
 
     }
     for (int iE = 0; iE < nEBins-1; ++iE){
         hRespMatrix_E_many[iE] = new TH2D(Form("hRespMatrix_E%d", iE), Form("#Delta E, E: %d - %d GeV, R=%0.1f;#eta_{jet};#Delta E",  int(JetEBorders[iE]), int(JetEBorders[iE+1]), Rvals[Rvalue]), 150, etaMin, etaMax, 50, -1.0, 1.0);
         jetTree->Draw(Form("(jetE-jetE_match)/jetE_match:jetEta>>hRespMatrix_E%d", iE), Form("jetR==%d && jetE_match>=%d && jetE_match<%d && jetEta>%f && jetEta<%f && jetEta_match>%f && jetEta_match<%f && jet_distmatch<%f && jetParts_match > %d", int(Rvals[Rvalue] * 10), int(JetEBorders[iE]), int(JetEBorders[iE+1]), etaMin+Rvals[Rvalue], etaMax-Rvals[Rvalue], etaMin+Rvals[Rvalue], etaMax-Rvals[Rvalue], Rvals[Rvalue]*0.6, constMin), "goff");
-        hRespMatrix_E_many[iE]->Scale(normalizations[NormValue]);
+        hRespMatrix_E_many[iE]->Scale(normalizations[NormValue]/500.0);
     }
 
 
@@ -125,7 +134,7 @@ void JetPlottingMergedEta(int NormValue=0,int Rvalue=0)
             hjetRatiopT_Eta[iEta][ipt] = new TH1D(Form("hjetRatiopT_Eta_%d_%d", iEta, ipt), Form("Jet-by-jet #Deltap_{T} distribution, #eta: %0.1f - %0.1f, p_{T}: %d - %d GeV/c", EtaBinBorders[iEta], EtaBinBorders[iEta+1], int(JetPtBorders[ipt]), int(JetPtBorders[ipt+1])), 50, -1.0, 1.0);
             jetTree->Draw(Form("(jetpT-jetpT_match)/jetpT_match>>hjetRatiopT_Eta_%d_%d", iEta, ipt), Form("jetR==%d && jetpT_match>=%d && jetpT_match<%d && jetEta>%f && jetEta<%f && jetEta_match>%f && jetEta_match<%f && jet_distmatch<%f && jetParts_match > %d", int(Rvals[Rvalue] * 10), int(JetPtBorders[ipt]), int(JetPtBorders[ipt+1]),EtaBinBorders[iEta], EtaBinBorders[iEta+1],EtaBinBorders[iEta], EtaBinBorders[iEta+1], Rvals[Rvalue]*0.6, constMin), "goff");
             if(hjetRatiopT_Eta[iEta][ipt]->GetEntries()==0) hjetRatiopT_Eta[iEta][ipt]->Fill(-2);
-            hjetRatiopT_Eta[iEta][ipt]->Scale(normalizations[NormValue]);
+            hjetRatiopT_Eta[iEta][ipt]->Scale(normalizations[NormValue]/500.0);
 
             EtamedianspT[iEta][ipt]=GetMedian(hjetRatiopT_Eta[iEta][ipt]);
             EtameanspT[iEta][ipt]=hjetRatiopT_Eta[iEta][ipt]->GetMean();
@@ -151,7 +160,7 @@ void JetPlottingMergedEta(int NormValue=0,int Rvalue=0)
             hjetRatioE_Eta[iEta][iE] = new TH1D(Form("hjetRatioE_Eta_%d_%d", iEta, iE), Form("Jet-by-jet #Delta E distribution, #eta: %0.1f - %0.1f, E: %d - %d GeV", EtaBinBorders[iEta], EtaBinBorders[iEta+1], int(JetEBorders[iE]), int(JetEBorders[iE+1])), 50, -1.0, 1.0);
             jetTree->Draw(Form("(jetE-jetE_match)/jetE_match>>hjetRatioE_Eta_%d_%d", iEta, iE), Form("jetR==%d && jetE_match>=%d && jetE_match<%d && jetEta>%f && jetEta<%f && jetEta_match>%f && jetEta_match<%f && jet_distmatch<%f && jetParts_match > %d", int(Rvals[Rvalue] * 10), int(JetEBorders[iE]), int(JetEBorders[iE+1]),EtaBinBorders[iEta], EtaBinBorders[iEta+1],EtaBinBorders[iEta], EtaBinBorders[iEta+1], Rvals[Rvalue]*0.6, constMin), "goff"); 
             if(hjetRatioE_Eta[iEta][iE]->GetEntries()==0) hjetRatioE_Eta[iEta][iE]->Fill(-2);
-            hjetRatioE_Eta[iEta][iE]->Scale(normalizations[NormValue]);
+            hjetRatioE_Eta[iEta][iE]->Scale(normalizations[NormValue]/500.0);
 
             EtamediansE[iEta][iE]=GetMedian(hjetRatioE_Eta[iEta][iE]);
             EtameansE[iEta][iE]=hjetRatioE_Eta[iEta][iE]->GetMean();
