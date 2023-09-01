@@ -193,8 +193,8 @@ void SpectraBoth()
         hist_pT_R_e[R][0]->Draw("hist");
         hist_pT_R_e[R][0]->Fit("f1", "", "", XpTminFit, XpTmaxFit);
 
-        TLegend *legend_pT_R_e = new TLegend(0.62, 0.72, 0.82, 0.87);
-        TLegend *Detlegend_pT_R_e = new TLegend(0.62, 0.54, 0.82, 0.69);
+        TLegend *legend_pT_R_e = new TLegend(0.59, 0.72, 0.79, 0.87);
+        TLegend *Detlegend_pT_R_e = new TLegend(0.59, 0.54, 0.79, 0.69);
 
         legend_pT_R_e->AddEntry((TObject *)0, "Particle level jets", "");
         legend_pT_R_e->AddEntry(hist_pT_R_e[R][0], Form("%s : #it{n} = %0.1f", etaRange[0].Data(), f1->GetParameter(1)), "l");
