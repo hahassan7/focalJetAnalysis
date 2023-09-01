@@ -157,7 +157,7 @@ void focalJetResolutionsTest(
     histDeltaPt_bins[r][e][exampleBins[p]]->GetFunction("gaus")->SetLineColor(colors[p]);
 
     std::cout << "Integral of " << p << " " << histDeltaPt_bins[r][e][exampleBins[p]]->Integral() << std::endl;
-    leg2->AddEntry(histDeltaPt_bins[r][e][exampleBins[p]], Form("%.0f< #it{p}_{T,part}<%.0f GeV/#it{c}", binningPt[exampleBins[p]], binningPt[exampleBins[p] + 1]), "p");
+    leg2->AddEntry(histDeltaPt_bins[r][e][exampleBins[p]], Form("%.0f < #it{p}_{T,part} < %.0f GeV/#it{c}", binningPt[exampleBins[p]], binningPt[exampleBins[p] + 1]), "p");
   }
 
   leg2->Draw("same");

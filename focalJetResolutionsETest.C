@@ -138,8 +138,8 @@ void focalJetResolutionsETest(
     histDeltaPt_bins[r][e][exampleBins[p]]->GetXaxis()->SetLabelFont(42);
     histDeltaPt_bins[r][e][exampleBins[p]]->GetXaxis()->SetTitleFont(62);
     histDeltaPt_bins[r][e][exampleBins[p]]->GetYaxis()->SetTitleFont(62);
-    histDeltaPt_bins[r][e][exampleBins[p]]->SetYTitle("1/#it{k} d#it{N}/d#Delta #it{E}");
-    histDeltaPt_bins[r][e][exampleBins[p]]->SetXTitle("#Delta #it{E} = (#it{E}_{part} #font[122]{-} #it{E}_{part})/#it{E}_{part} ");
+    histDeltaPt_bins[r][e][exampleBins[p]]->SetYTitle("1/#it{k} d#it{N}/d#Delta#it{E}");
+    histDeltaPt_bins[r][e][exampleBins[p]]->SetXTitle("#Delta#it{E} = (#it{E}_{part} #font[122]{-} #it{E}_{part})/#it{E}_{part} ");
     // histDeltaPt_bins[r][e][exampleBins[p]]->Fit("gaus");
     histDeltaPt_bins[r][e][exampleBins[p]]->Draw("same");
     histDeltaPt_bins[r][e][exampleBins[p]]->SetTitle("");
@@ -152,7 +152,7 @@ void focalJetResolutionsETest(
     // histDeltaPt_bins[r][e][exampleBins[p]]->GetFunction("f1")->SetLineColor(colors[p]);
     histDeltaPt_bins[r][e][exampleBins[p]]->GetFunction("gaus")->SetLineColor(colors[p]);
 
-    leg2->AddEntry(histDeltaPt_bins[r][e][exampleBins[p]], Form("%.0f< #it{E}_{part}<%.0f GeV", binningPt[exampleBins[p]], binningPt[exampleBins[p] + 1]), "p");
+    leg2->AddEntry(histDeltaPt_bins[r][e][exampleBins[p]], Form("%.0f < #it{E}_{part} < %.0f GeV", binningPt[exampleBins[p]], binningPt[exampleBins[p] + 1]), "p");
   }
 
   leg2->Draw("same");

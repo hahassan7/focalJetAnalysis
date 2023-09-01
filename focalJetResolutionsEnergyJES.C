@@ -82,6 +82,8 @@ void focalJetResolutionsEnergyJES(TString inputfileR02 = "Data20230816/JES/EneMe
 
   TH2D *jesframe = new TH2D("jesframe", "", 5000, JESMinX, JESMaxX, 2000, -0.7, 0.2);
   SetStyleHistoTH2ForGraphs(jesframe, "#it{E}_{part} (GeV)", "JES", 0.85 * textSize, textSize, 0.85 * textSize, textSize, 0.92, 0.8, 510, 505, 42, 62);
+  jesframe->GetXaxis()->SetLabelOffset(0.004);
+  jesframe->GetYaxis()->SetLabelOffset(0.006);
 
   TCanvas *cJER = new TCanvas("cJER", "cJER", 2 * 600, 2 * 400);
   DrawPaperCanvasSettings(cJER, 0.081, 0.011, 0.013, 0.097);
@@ -89,6 +91,8 @@ void focalJetResolutionsEnergyJES(TString inputfileR02 = "Data20230816/JES/EneMe
 
   TH2D *jerframe = new TH2D("jerframe", "", 5000, JESMinX, JESMaxX, 2000, 0.075, 0.22);
   SetStyleHistoTH2ForGraphs(jerframe, "#it{E}_{part} (GeV)", "JER", 0.85 * textSize, textSize, 0.85 * textSize, textSize, 0.92, 0.8, 510, 505, 42, 62);
+  jerframe->GetXaxis()->SetLabelOffset(0.004);
+  jerframe->GetYaxis()->SetLabelOffset(0.006);
 
   for (int e = 0; e < 1; e++)
   {
@@ -117,9 +121,9 @@ void focalJetResolutionsEnergyJES(TString inputfileR02 = "Data20230816/JES/EneMe
     leg2->Draw("same");
     drawLatexAdd("ALICE simulation, pp #sqrt{#it{s}} = 14 TeV", 0.95, 0.965 - 1 * 1.1 * textSize, textSize, kFALSE, kFALSE, kTRUE);
     drawLatexAdd("FoCal upgrade", 0.95, 0.965 - 2 * 1.1 * textSize, textSize, kFALSE, kFALSE, kTRUE);
-    drawLatexAdd(Form("jets, anti-#it{k}_{T}, #it{R}=0.6, %s", etaRange[e].Data()), 0.95, 0.965 - 3 * 1.1 * textSize, textSize, kFALSE, kFALSE, kTRUE);
-    // drawLatexAdd("#it{R}=0.6", 0.95, 0.965 - 4.2 * 1.1 * textSize, textSize, kFALSE, kFALSE, kTRUE);
-    drawLatexAdd("#Delta #it{E} = (#it{E}_{det} #font[122]{-} #it{E}_{part})/#it{E}_{part}", 0.95, 0.965 - 4.5 * 1.1 * textSize, textSize, kFALSE, kFALSE, kTRUE);
+    drawLatexAdd(Form("jets, anti-#it{k}_{T}, #it{R} = 0.6, %s", etaRange[e].Data()), 0.95, 0.965 - 3 * 1.1 * textSize, textSize, kFALSE, kFALSE, kTRUE);
+    // drawLatexAdd("#it{R} = 0.6", 0.95, 0.965 - 4.2 * 1.1 * textSize, textSize, kFALSE, kFALSE, kTRUE);
+    drawLatexAdd("#Delta#it{E} = (#it{E}_{det} #font[122]{-} #it{E}_{part})/#it{E}_{part}", 0.95, 0.965 - 4.5 * 1.1 * textSize, textSize, kFALSE, kFALSE, kTRUE);
 
     jesframe->Draw("axis,same");
 
@@ -151,7 +155,7 @@ void focalJetResolutionsEnergyJES(TString inputfileR02 = "Data20230816/JES/EneMe
     leg3->Draw("same");
     drawLatexAdd("ALICE simulation, pp #sqrt{#it{s}} = 14 TeV", 0.95, 0.965 - 1 * 1.1 * textSize, textSize, kFALSE, kFALSE, kTRUE);
     drawLatexAdd("FoCal upgrade", 0.95, 0.965 - 2 * 1.1 * textSize, textSize, kFALSE, kFALSE, kTRUE);
-    drawLatexAdd(Form("jets, anti-#it{k}_{T}, #it{R}=0.6, %s", etaRange[e].Data()), 0.95, 0.965 - 3 * 1.1 * textSize, textSize, kFALSE, kFALSE, kTRUE);
+    drawLatexAdd(Form("jets, anti-#it{k}_{T}, #it{R} = 0.6, %s", etaRange[e].Data()), 0.95, 0.965 - 3 * 1.1 * textSize, textSize, kFALSE, kFALSE, kTRUE);
     jerframe->Draw("axis,same");
 
     cJER->cd();

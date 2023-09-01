@@ -157,6 +157,8 @@ void focalJetResolutions(
 
   TH2D *jesframe = new TH2D("jesframe", "", 5000, JESMinX, JESMaxX, 2000, -0.7, 0.2); // 72 -0.7
   SetStyleHistoTH2ForGraphs(jesframe, "#it{p}_{T,part} (GeV/#it{c})", "JES", 0.85 * textSize, textSize, 0.85 * textSize, textSize, 0.92, 0.85, 510, 505, 42, 62);
+  jesframe->GetXaxis()->SetLabelOffset(0.004);
+  jesframe->GetYaxis()->SetLabelOffset(0.006);
 
   TCanvas *cJER = new TCanvas("cJER", "cJER", 2 * 600, 2 * 400);
   DrawPaperCanvasSettings(cJER, 0.081, 0.01, 0.013, 0.11);
@@ -164,6 +166,8 @@ void focalJetResolutions(
 
   TH2D *jerframe = new TH2D("jerframe", "", 5000, JESMinX, JESMaxX, 2000, 0.045, 0.22); // 72 0.05
   SetStyleHistoTH2ForGraphs(jerframe, "#it{p}_{T,part} (GeV/#it{c})", "JER", 0.85 * textSize, textSize, 0.85 * textSize, textSize, 0.92, 0.85, 510, 505, 42, 62);
+  jerframe->GetXaxis()->SetLabelOffset(0.004);
+  jerframe->GetYaxis()->SetLabelOffset(0.006);
 
   for (int r = 0; r < RMax; r++)
   {
@@ -235,7 +239,7 @@ void focalJetResolutions(
     leg2->Draw("same");
     drawLatexAdd("ALICE simulation, pp #sqrt{#it{s}} = 14 TeV", 0.95, 0.965 - 1 * 1.1 * textSize, textSize, kFALSE, kFALSE, kTRUE);
     drawLatexAdd("FoCal upgrade", 0.95, 0.965 - 2 * 1.1 * textSize, textSize, kFALSE, kFALSE, kTRUE);
-    drawLatexAdd(Form("#it{R}=0.6 jets, anti-#it{k}_{T}, %s", etaRange[e].Data()), 0.95, 0.965 - 3 * 1.1 * textSize, textSize, kFALSE, kFALSE, kTRUE);
+    drawLatexAdd(Form("jets, anti-#it{k}_{T}, #it{R} = 0.6, %s", etaRange[e].Data()), 0.95, 0.965 - 3 * 1.1 * textSize, textSize, kFALSE, kFALSE, kTRUE);
     // drawLatexAdd("#it{R}=0.6",0.95,0.965-4.2*1.1*textSize, textSize,kFALSE, kFALSE, kTRUE);
     drawLatexAdd("#Delta#it{p}_{T} = (#it{p}_{T,det} #font[122]{-} #it{p}_{T,part})/#it{p}_{T,part} ", 0.95, 0.965 - 4.5 * 1.1 * textSize, textSize, kFALSE, kFALSE, kTRUE);
     jesframe->Draw("axis,same");
@@ -272,7 +276,7 @@ void focalJetResolutions(
     leg3->Draw("same");
     drawLatexAdd("ALICE simulation, pp #sqrt{#it{s}} = 14 TeV", 0.95, 0.965 - 1 * 1.1 * textSize, textSize, kFALSE, kFALSE, kTRUE);
     drawLatexAdd("FoCal upgrade", 0.95, 0.965 - 2 * 1.1 * textSize, textSize, kFALSE, kFALSE, kTRUE);
-    drawLatexAdd(Form("#it{R}=0.6 jets, anti-#it{k}_{T}, %s", etaRange[e].Data()), 0.95, 0.965 - 3 * 1.1 * textSize, textSize, kFALSE, kFALSE, kTRUE);
+    drawLatexAdd(Form("jets, anti-#it{k}_{T}, #it{R} = 0.6, %s", etaRange[e].Data()), 0.95, 0.965 - 3 * 1.1 * textSize, textSize, kFALSE, kFALSE, kTRUE);
     drawLatexAdd("#Delta#it{p}_{T} = (#it{p}_{T,det} #font[122]{-} #it{p}_{T,part})/#it{p}_{T,part} ", 0.95, 0.965 - 4.5 * 1.1 * textSize, textSize, kFALSE, kFALSE, kTRUE);
     jerframe->Draw("axis,same");
 

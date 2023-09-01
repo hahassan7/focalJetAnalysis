@@ -159,6 +159,8 @@ void focalJetResolutionsEnergy(
 
   TH2D *jesframe = new TH2D("jesframe", "", 5000, JESMinX, JESMaxX, 2000, -0.7, 0.2);
   SetStyleHistoTH2ForGraphs(jesframe, "#it{E}_{part} (GeV)", "JES", 0.85 * textSize, textSize, 0.85 * textSize, textSize, 0.92, 0.85, 510, 505, 42, 62);
+  jesframe->GetXaxis()->SetLabelOffset(0.004);
+  jesframe->GetYaxis()->SetLabelOffset(0.006);
 
   TCanvas *cJER = new TCanvas("cJER", "cJER", 2 * 600, 2 * 400);
   DrawPaperCanvasSettings(cJER, 0.081, 0.01, 0.013, 0.11);
@@ -166,6 +168,8 @@ void focalJetResolutionsEnergy(
 
   TH2D *jerframe = new TH2D("jerframe", "", 5000, JESMinX, JESMaxX, 2000, 0.045, 0.22);
   SetStyleHistoTH2ForGraphs(jerframe, "#it{E}_{part} (GeV)", "JER", 0.85 * textSize, textSize, 0.85 * textSize, textSize, 0.92, 0.85, 510, 505, 42, 62);
+  jerframe->GetXaxis()->SetLabelOffset(0.004);
+  jerframe->GetYaxis()->SetLabelOffset(0.006);
 
   for (int r = 0; r < RMax; r++)
   {
@@ -237,9 +241,9 @@ void focalJetResolutionsEnergy(
     leg2->Draw("same");
     drawLatexAdd("ALICE simulation, pp #sqrt{#it{s}} = 14 TeV", 0.95, 0.965 - 1 * 1.1 * textSize, textSize, kFALSE, kFALSE, kTRUE);
     drawLatexAdd("FoCal upgrade", 0.95, 0.965 - 2 * 1.1 * textSize, textSize, kFALSE, kFALSE, kTRUE);
-    drawLatexAdd(Form("#it{R}=0.6 jets, anti-#it{k}_{T}, %s", etaRange[e].Data()), 0.95, 0.965 - 3 * 1.1 * textSize, textSize, kFALSE, kFALSE, kTRUE);
-    // drawLatexAdd("#it{R}=0.6",0.95,0.965-4.2*1.1*textSize, textSize,kFALSE, kFALSE, kTRUE);
-    drawLatexAdd("#Delta #it{E} = (#it{E}_{det} #font[122]{-} #it{E}_{part})/#it{E}_{part}", 0.95, 0.965 - 4.5 * 1.1 * textSize, textSize, kFALSE, kFALSE, kTRUE);
+    drawLatexAdd(Form("jets, anti-#it{k}_{T}, #it{R} = 0.6, %s", etaRange[e].Data()), 0.95, 0.965 - 3 * 1.1 * textSize, textSize, kFALSE, kFALSE, kTRUE);
+    // drawLatexAdd("#it{R} = 0.6",0.95,0.965-4.2*1.1*textSize, textSize,kFALSE, kFALSE, kTRUE);
+    drawLatexAdd("#Delta#it{E} = (#it{E}_{det} #font[122]{-} #it{E}_{part})/#it{E}_{part}", 0.95, 0.965 - 4.5 * 1.1 * textSize, textSize, kFALSE, kFALSE, kTRUE);
     jesframe->Draw("axis,same");
 
     cJES->cd();
@@ -272,8 +276,8 @@ void focalJetResolutionsEnergy(
     leg3->Draw("same");
     drawLatexAdd("ALICE simulation, pp #sqrt{#it{s}} = 14 TeV", 0.95, 0.965 - 1 * 1.1 * textSize, textSize, kFALSE, kFALSE, kTRUE);
     drawLatexAdd("FoCal upgrade", 0.95, 0.965 - 2 * 1.1 * textSize, textSize, kFALSE, kFALSE, kTRUE);
-    drawLatexAdd(Form("#it{R}=0.6 jets, anti-#it{k}_{T}, %s", etaRange[e].Data()), 0.95, 0.965 - 3 * 1.1 * textSize, textSize, kFALSE, kFALSE, kTRUE);
-    drawLatexAdd("#Delta #it{E} = (#it{E}_{det} #font[122]{-} #it{E}_{part})/#it{E}_{part}", 0.95, 0.965 - 4.5 * 1.1 * textSize, textSize, kFALSE, kFALSE, kTRUE);
+    drawLatexAdd(Form("jets, anti-#it{k}_{T}, #it{R} = 0.6, %s", etaRange[e].Data()), 0.95, 0.965 - 3 * 1.1 * textSize, textSize, kFALSE, kFALSE, kTRUE);
+    drawLatexAdd("#Delta#it{E} = (#it{E}_{det} #font[122]{-} #it{E}_{part})/#it{E}_{part}", 0.95, 0.965 - 4.5 * 1.1 * textSize, textSize, kFALSE, kFALSE, kTRUE);
     jerframe->Draw("axis,same");
 
     cJER->cd();
@@ -355,7 +359,7 @@ void focalJetResolutionsEnergy(
 
     padRight->cd();
     TH2D *esframeR = new TH2D("effframe", "", 5000, -1.01, 0.5, 2000, 0., maxY);
-    SetStyleHistoTH2ForGraphs(esframeR, "#Delta #it{E} = (#it{E}_{det} #font[122]{-} #it{E}_{part})/#it{E}_{part} ", "1/#it{k} d#it{N}/d#Delta #it{E}", 0.85 * textSizeLabels[0], textSizeLabels[0], 0.85 * textSizeLabels[0], textSizeLabels[0], 0.955, 1.45, 510, yDivs, 42, 62);
+    SetStyleHistoTH2ForGraphs(esframeR, "#Delta#it{E} = (#it{E}_{det} #font[122]{-} #it{E}_{part})/#it{E}_{part} ", "1/#it{k} d#it{N}/d#Delta#it{E}", 0.85 * textSizeLabels[0], textSizeLabels[0], 0.85 * textSizeLabels[0], textSizeLabels[0], 0.955, 1.45, 510, yDivs, 42, 62);
     esframeR->GetYaxis()->SetLabelOffset(0.01);
     esframeR->GetYaxis()->SetTickLength(0.035);
     esframeR->Draw("axis");
@@ -376,7 +380,7 @@ void focalJetResolutionsEnergy(
     esframeR->Draw("axis,same");
     padMiddle->cd();
     TH2D *esframeM = new TH2D("effframe", "", 5000, -1.01, 0.5, 2000, 0., maxY);
-    SetStyleHistoTH2ForGraphs(esframeM, "#Delta #it{E} = (#it{E}_{det} #font[122]{-} #it{E}_{part})/#it{E}_{part} ", "1/#it{k} d#it{N}/d#Delta #it{E}", 0.85 * textSizeLabels[1], textSizeLabels[1], 0.85 * textSizeLabels[1], textSizeLabels[1], 0.84, 0.95, 510, yDivs, 42, 62);
+    SetStyleHistoTH2ForGraphs(esframeM, "#Delta#it{E} = (#it{E}_{det} #font[122]{-} #it{E}_{part})/#it{E}_{part} ", "1/#it{k} d#it{N}/d#Delta#it{E}", 0.85 * textSizeLabels[1], textSizeLabels[1], 0.85 * textSizeLabels[1], textSizeLabels[1], 0.84, 0.95, 510, yDivs, 42, 62);
     esframeM->GetYaxis()->SetTickLength(0.04);
     esframeM->GetXaxis()->SetLabelOffset(-0.001);
     esframeM->Draw("axis");
@@ -396,7 +400,7 @@ void focalJetResolutionsEnergy(
 
     padLeft->cd();
     TH2D *esframeL = new TH2D("esframeL", "", 5000, -1.01, 0.5, 2000, 0., maxY);
-    SetStyleHistoTH2ForGraphs(esframeL, "#Delta #it{E} = (#it{E}_{det} #font[122]{-} #it{E}_{part})/#it{E}_{part} ", "#it{E}", 0.85 * textSizeLabels[1], textSizeLabels[1], 0.85 * textSizeLabels[1], textSizeLabels[1], 0.83, 0.95, 510, yDivs, 42, 62);
+    SetStyleHistoTH2ForGraphs(esframeL, "#Delta#it{E} = (#it{E}_{det} #font[122]{-} #it{E}_{part})/#it{E}_{part} ", "#it{E}", 0.85 * textSizeLabels[1], textSizeLabels[1], 0.85 * textSizeLabels[1], textSizeLabels[1], 0.83, 0.95, 510, yDivs, 42, 62);
     esframeL->GetYaxis()->SetTickLength(0.038);
     esframeL->GetXaxis()->SetLabelOffset(-0.001);
     esframeL->Draw("axis");
@@ -425,7 +429,7 @@ void focalJetResolutionsEnergy(
 
     padRight->cd();
     TH2D *esframeR = new TH2D("effframe", "", 5000, -1.01, 0.5, 2000, 0., maxY);
-    SetStyleHistoTH2ForGraphs(esframeR, "#Delta #it{E} = (#it{E}_{det} #font[122]{-} #it{E}_{part})/#it{E}_{part} ", "1/#it{k} d#it{N}/d#Delta #it{E}", 0.85 * textSizeLabels[0], textSizeLabels[0], 0.85 * textSizeLabels[0], textSizeLabels[0], 0.955, 1.45, 510, yDivs, 42, 62);
+    SetStyleHistoTH2ForGraphs(esframeR, "#Delta#it{E} = (#it{E}_{det} #font[122]{-} #it{E}_{part})/#it{E}_{part} ", "1/#it{k} d#it{N}/d#Delta#it{E}", 0.85 * textSizeLabels[0], textSizeLabels[0], 0.85 * textSizeLabels[0], textSizeLabels[0], 0.955, 1.45, 510, yDivs, 42, 62);
     esframeR->GetYaxis()->SetLabelOffset(0.01);
     esframeR->GetYaxis()->SetTickLength(0.035);
     esframeR->Draw("axis");
@@ -449,7 +453,7 @@ void focalJetResolutionsEnergy(
     esframeR->Draw("axis,same");
     padMiddle->cd();
     TH2D *esframeM = new TH2D("effframe", "", 5000, -1.01, 0.5, 2000, 0., maxY);
-    SetStyleHistoTH2ForGraphs(esframeM, "#Delta #it{E} = (#it{E}_{det} #font[122]{-} #it{E}_{part})/#it{E}_{part} ", "1/#it{k} d#it{N}/d#Delta #it{E}", 0.85 * textSizeLabels[1], textSizeLabels[1], 0.85 * textSizeLabels[1], textSizeLabels[1], 0.84, 0.95, 510, yDivs, 42, 62);
+    SetStyleHistoTH2ForGraphs(esframeM, "#Delta#it{E} = (#it{E}_{det} #font[122]{-} #it{E}_{part})/#it{E}_{part} ", "1/#it{k} d#it{N}/d#Delta#it{E}", 0.85 * textSizeLabels[1], textSizeLabels[1], 0.85 * textSizeLabels[1], textSizeLabels[1], 0.84, 0.95, 510, yDivs, 42, 62);
     esframeM->GetYaxis()->SetTickLength(0.04);
     esframeM->GetXaxis()->SetLabelOffset(-0.001);
     esframeM->Draw("axis");
@@ -472,7 +476,7 @@ void focalJetResolutionsEnergy(
 
     padLeft->cd();
     TH2D *esframeL = new TH2D("esframeL", "", 5000, -1.01, 0.5, 2000, 0., maxY);
-    SetStyleHistoTH2ForGraphs(esframeL, "#Delta #it{E} = (#it{E}_{det} #font[122]{-} #it{E}_{part})/#it{E}_{part} ", "#it{E}", 0.85 * textSizeLabels[1], textSizeLabels[1], 0.85 * textSizeLabels[1], textSizeLabels[1], 0.83, 0.95, 510, yDivs, 42, 62);
+    SetStyleHistoTH2ForGraphs(esframeL, "#Delta#it{E} = (#it{E}_{det} #font[122]{-} #it{E}_{part})/#it{E}_{part} ", "#it{E}", 0.85 * textSizeLabels[1], textSizeLabels[1], 0.85 * textSizeLabels[1], textSizeLabels[1], 0.83, 0.95, 510, yDivs, 42, 62);
     esframeL->GetYaxis()->SetTickLength(0.038);
     esframeL->GetXaxis()->SetLabelOffset(-0.001);
     esframeL->Draw("axis");

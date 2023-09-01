@@ -75,7 +75,7 @@ void SpectraBoth()
     // const double EtaBinBorders[nEtaBins] = {3.4,5.0,5.5}; //
     // const double EtaMin[2] = {3.4,3.9};
     // const double EtaMax[2] = {5.0,5.5};
-    TString etaRange[nEtaBins - 1] = {"4.0< #eta_{jet} < 4.5", "4.5 < #eta_{jet} < 4.9"}; // consider making this different range for R=0.6, 0.4, 0.2. ...
+    TString etaRange[nEtaBins - 1] = {"4.0 < #it{#eta}_{jet} < 4.5", "4.5 < #it{#eta}_{jet} < 4.9"}; // consider making this different range for R=0.6, 0.4, 0.2. ...
     const Int_t nConst = 5;
     const Int_t ConstVals[nConst] = {1, 2, 3, 5, 10}; // constituent values to check
 
@@ -85,7 +85,7 @@ void SpectraBoth()
         hist_pT_R[R] = (TH1F *)(file->Get(Form("hist_pT_R%d", R))->Clone());
         hist_pT_R[R]->SetLineColor(colors[R]);
         NormalizeToProb(hist_pT_R[R]);
-        hist_pT_R[R]->SetTitle(Form("pT Distribution for R = %d; pT [GeV/c]; d#sigma/dp_{T}dy (pb(GeV/c)^{-1})", R));
+        hist_pT_R[R]->SetTitle(Form("pT Distribution for R = %d; pT [GeV/#it{c}]; d#sigma/d#it{p}_{T}d#it{y} (pb(GeV/#it{c})^{-1})", R));
         hist_pT_R[R]->GetYaxis()->SetRangeUser(limitYpTmin, limitYpT);
         hist_pT_R[R]->GetXaxis()->SetRangeUser(XpTmin, XpTmax);
         // normalize all the histograms to the NofEntries (check if 1/Integral is enough etc. or nentries or what not)
@@ -93,7 +93,7 @@ void SpectraBoth()
         Dethist_pT_R[R] = (TH1F *)(fileDet->Get(Form("Dethist_pT_R%d", R))->Clone());
         Dethist_pT_R[R]->SetLineColor(colors[R]);
         NormalizeToProb(Dethist_pT_R[R]);
-        Dethist_pT_R[R]->SetTitle(Form("pT Distribution for R = %d; pT [GeV/c]; d#sigma/dp_{T}dy (pb(GeV/c)^{-1})", R));
+        Dethist_pT_R[R]->SetTitle(Form("pT Distribution for R = %d; pT [GeV/#it{c}]; d#sigma/d#it{p}_{T}d#it{y} (pb(GeV/#it{c})^{-1})", R));
         Dethist_pT_R[R]->GetYaxis()->SetRangeUser(limitYpTmin, limitYpT);
         Dethist_pT_R[R]->GetXaxis()->SetRangeUser(XpTmin, XpTmax);
 
@@ -101,14 +101,14 @@ void SpectraBoth()
         hist_E_R[R] = (TH1F *)(file->Get(Form("hist_E_R%d", R))->Clone());
         hist_E_R[R]->SetLineColor(colors[R]);
         NormalizeToProb(hist_E_R[R]);
-        hist_E_R[R]->SetTitle(Form("E Distribution for R = %d; E [GeV]; d#sigma/dEdy (pb(GeV)^{-1})", R));
+        hist_E_R[R]->SetTitle(Form("E Distribution for R = %d; E [GeV]; d#sigma/dEd#it{y} (pb(GeV)^{-1})", R));
         hist_E_R[R]->GetYaxis()->SetRangeUser(limitYEmin, limitYE);
         hist_E_R[R]->GetXaxis()->SetRangeUser(XEmin, XEmax);
 
         Dethist_E_R[R] = (TH1F *)(fileDet->Get(Form("hist_E_R%d", R))->Clone());
         Dethist_E_R[R]->SetLineColor(colors[R]);
         NormalizeToProb(Dethist_E_R[R]);
-        Dethist_E_R[R]->SetTitle(Form("E Distribution for R = %d; E [GeV]; d#sigma/dEdy (pb(GeV)^{-1})", R));
+        Dethist_E_R[R]->SetTitle(Form("E Distribution for R = %d; E [GeV]; d#sigma/dEd#it{y} (pb(GeV)^{-1})", R));
         Dethist_E_R[R]->GetYaxis()->SetRangeUser(limitYEmin, limitYE);
         Dethist_E_R[R]->GetXaxis()->SetRangeUser(XEmin, XEmax);
 
@@ -119,7 +119,7 @@ void SpectraBoth()
             hist_pT_R_e[R][e]->SetLineColor(colors[e]);
             hist_pT_R_e[R][e]->SetLineStyle(style[0]);
             NormalizeToProb(hist_pT_R_e[R][e]);
-            hist_pT_R_e[R][e]->SetTitle(Form("pT Distribution for R = %d, e = %d; p_{T} (GeV/c); d#sigma/dp_{T}dy (pb(GeV/c)^{-1})", R, e));
+            hist_pT_R_e[R][e]->SetTitle(Form("pT Distribution for R = %d, e = %d; #it{p}_{T} (GeV/#it{c}); d#sigma/d#it{p}_{T}d#it{y} (pb(GeV/#it{c})^{-1})", R, e));
             hist_pT_R_e[R][e]->GetYaxis()->SetRangeUser(limitYpTmin, limitYpT);
             hist_pT_R_e[R][e]->GetXaxis()->SetRangeUser(XpTmin, XpTmax);
 
@@ -127,7 +127,7 @@ void SpectraBoth()
             Dethist_pT_R_e[R][e]->SetLineColor(colors[e]);
             Dethist_pT_R_e[R][e]->SetLineStyle(style[1]);
             NormalizeToProb(Dethist_pT_R_e[R][e]);
-            // Dethist_pT_R_e[R][e]->SetTitle(Form("pT Distribution for R = %d, e = %d; pT [GeV/c]; d#sigma/dp_{T}dy", R, e));
+            // Dethist_pT_R_e[R][e]->SetTitle(Form("pT Distribution for R = %d, e = %d; pT [GeV/#it{c}]; d#sigma/d#it{p}_{T}d#it{y}", R, e));
             Dethist_pT_R_e[R][e]->GetYaxis()->SetRangeUser(limitYpTmin, limitYpT);
             Dethist_pT_R_e[R][e]->GetXaxis()->SetRangeUser(XpTmin, XpTmax);
 
@@ -136,7 +136,7 @@ void SpectraBoth()
             hist_E_R_e[R][e]->SetLineColor(colors[e]);
             hist_E_R_e[R][e]->SetLineStyle(style[0]);
             NormalizeToProb(hist_E_R_e[R][e]);
-            hist_E_R_e[R][e]->SetTitle(Form("E Distribution for R = %d, e = %d; E [GeV]; d#sigma/dEdy (pb(GeV)^{-1})", R, e));
+            hist_E_R_e[R][e]->SetTitle(Form("E Distribution for R = %d, e = %d; E [GeV]; d#sigma/dEd#it{y} (pb(GeV)^{-1})", R, e));
             hist_E_R_e[R][e]->GetYaxis()->SetRangeUser(limitYEmin, limitYE);
             hist_E_R_e[R][e]->GetXaxis()->SetRangeUser(XEmin, XEmax);
 
@@ -144,7 +144,7 @@ void SpectraBoth()
             Dethist_E_R_e[R][e]->SetLineColor(colors[e]);
             Dethist_E_R_e[R][e]->SetLineStyle(style[1]);
             NormalizeToProb(Dethist_E_R_e[R][e]);
-            // Dethist_E_R_e[R][e]->SetTitle(Form("E Distribution for R = %d, e = %d; E [GeV]; d#sigma/dEdy", R, e));
+            // Dethist_E_R_e[R][e]->SetTitle(Form("E Distribution for R = %d, e = %d; E [GeV]; d#sigma/dEd#it{y}", R, e));
             Dethist_E_R_e[R][e]->GetYaxis()->SetRangeUser(limitYEmin, limitYE);
             Dethist_E_R_e[R][e]->GetXaxis()->SetRangeUser(XEmin, XEmax);
         }
@@ -197,14 +197,14 @@ void SpectraBoth()
         TLegend *Detlegend_pT_R_e = new TLegend(0.62, 0.54, 0.82, 0.69);
 
         legend_pT_R_e->AddEntry((TObject *)0, "Particle level jets", "");
-        legend_pT_R_e->AddEntry(hist_pT_R_e[R][0], Form("%s : n = %0.1f", etaRange[0].Data(), f1->GetParameter(1)), "l");
+        legend_pT_R_e->AddEntry(hist_pT_R_e[R][0], Form("%s : #it{n} = %0.1f", etaRange[0].Data(), f1->GetParameter(1)), "l");
 
         for (int e = 1; e < 2; ++e)
         {
             hist_pT_R_e[R][e]->Draw("hist SAME");
         }
         hist_pT_R_e[R][1]->Fit("f2", "", "", XpTminFit, 70);
-        legend_pT_R_e->AddEntry(hist_pT_R_e[R][1], Form("%s : n = %0.1f", etaRange[1].Data(), f2->GetParameter(1)), "l");
+        legend_pT_R_e->AddEntry(hist_pT_R_e[R][1], Form("%s : #it{n} = %0.1f", etaRange[1].Data(), f2->GetParameter(1)), "l");
 
         legend_pT_R_e->SetTextSize(0.032);
         legend_pT_R_e->SetBorderSize(0);
@@ -222,8 +222,8 @@ void SpectraBoth()
         Dethist_pT_R_e[R][0]->Fit("f3", "", "", XpTminFit, XpTmaxFit);
         Dethist_pT_R_e[R][1]->Fit("f4", "", "", XpTminFit, 70);
 
-        Detlegend_pT_R_e->AddEntry(Dethist_pT_R_e[R][0], Form("%s : n = %0.1f", etaRange[0].Data(), f3->GetParameter(1)), "l");
-        Detlegend_pT_R_e->AddEntry(Dethist_pT_R_e[R][1], Form("%s : n = %0.1f", etaRange[1].Data(), f4->GetParameter(1)), "l");
+        Detlegend_pT_R_e->AddEntry(Dethist_pT_R_e[R][0], Form("%s : #it{n} = %0.1f", etaRange[0].Data(), f3->GetParameter(1)), "l");
+        Detlegend_pT_R_e->AddEntry(Dethist_pT_R_e[R][1], Form("%s : #it{n} = %0.1f", etaRange[1].Data(), f4->GetParameter(1)), "l");
 
         Detlegend_pT_R_e->SetTextSize(0.032);
         Detlegend_pT_R_e->SetBorderSize(0);
@@ -260,7 +260,7 @@ void ChangeTitleOfCanvas(TCanvas *cCanvas, TString sTitle)
 
     drawLatexAdd("ALICE simulation, pp #sqrt{#it{s}} = 14 TeV", 0.45, 0.365 - 1 * 1.1 * textSize, textSize, kFALSE, kFALSE, kTRUE);
     drawLatexAdd("FoCal upgrade", 0.45, 0.365 - 2 * 1.1 * textSize, textSize, kFALSE, kFALSE, kTRUE);
-    drawLatexAdd("jets, anti-#it{k}_{T}, R=0.6", 0.45, 0.365 - 3 * 1.1 * textSize, textSize, kFALSE, kFALSE, kTRUE);
+    drawLatexAdd("jets, anti-#it{k}_{T}, #it{R} = 0.6", 0.45, 0.365 - 3 * 1.1 * textSize, textSize, kFALSE, kFALSE, kTRUE);
     // drawLatexAdd("R=0.6",0.95,0.965-4.2*1.1*textSize, textSize,kFALSE, kFALSE, kTRUE);
 
     if (SettingLogY == 1)

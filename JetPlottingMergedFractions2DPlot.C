@@ -99,8 +99,8 @@ void JetPlottingMergedFractions2DPlot()
 
             drawLatexAdd("ALICE simulation, pp #sqrt{#it{s}} = 14 TeV", 0.1, 1.01 - 1 * 0.9 * textSize, 0.85 * textSize, kFALSE, kFALSE, kFALSE);
             drawLatexAdd("FoCal upgrade", 0.1, 1.01 - 2 * 0.9 * textSize, 0.85 * textSize, kFALSE, kFALSE, kFALSE);
-            drawLatexAdd("jets, anti-#it{k}_{T}, R=0.6", 0.9, 1.01 - 1 * 0.9 * textSize, 0.85 * textSize, kFALSE, kFALSE, kTRUE);
-            drawLatexAdd(Form("%.0f< #it{p}_{T,det}<%.0f GeV/#it{c}", JetpTBorders[exampleBins[e]], JetpTBorders[exampleBins[e] + 1]), 0.9, 1.01 - 2 * 0.9 * textSize, 0.85 * textSize, kFALSE, kFALSE, kTRUE);
+            drawLatexAdd("jets, anti-#it{k}_{T}, #it{R} = 0.6", 0.9, 1.01 - 1 * 0.9 * textSize, 0.85 * textSize, kFALSE, kFALSE, kTRUE);
+            drawLatexAdd(Form("%.0f< #it{p}_{T,det} < %.0f GeV/#it{c}", JetpTBorders[exampleBins[e]], JetpTBorders[exampleBins[e] + 1]), 0.9, 1.01 - 2 * 0.9 * textSize, 0.85 * textSize, kFALSE, kFALSE, kTRUE);
             cCorr->Update();
             cCorr->SaveAs(Form("figs/2D/ResponseMatrix_%d_6.pdf", e));
         }

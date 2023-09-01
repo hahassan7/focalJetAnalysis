@@ -134,7 +134,7 @@ void PlotHistogramsOnePanel(TH1F *histos[npTBins - 1][nR], const TString &title,
 
         if (histos[eb][2] != nullptr)
         {
-            legend->AddEntry(histos[eb][2], Form("#it{p}_{T}^{jet} = %0.0f - %0.0f GeV/#it{c}", JetpTBorders[eb], JetpTBorders[eb + 1]), "lp");
+            legend->AddEntry(histos[eb][2], Form("#it{p}_{T}^{jet} = %0.0f--%0.0f GeV/#it{c}", JetpTBorders[eb], JetpTBorders[eb + 1]), "lp");
         }
 
         legend->Draw();
@@ -153,7 +153,7 @@ void PlotHistogramsOnePanel(TH1F *histos[npTBins - 1][nR], const TString &title,
     drawLatexAdd("ALICE simulation, pp #sqrt{#it{s}} = 14 TeV", 0.15, 0.93 - 1 * 1.1 * textSize, textSize, kFALSE, kFALSE, kFALSE);
     drawLatexAdd("FoCal upgrade", 0.15, 0.93 - 2 * 1.1 * textSize, textSize, kFALSE, kFALSE, kFALSE);
     drawLatexAdd("Particle-level jets", 0.15, 0.93 - 3 * 1.1 * textSize, textSize, kFALSE, kFALSE, kFALSE);
-    drawLatexAdd(Form("anti-#it{k}_{T}, #it{R}=0.6, %s", etaRange[0].Data()), 0.15, 0.93 - 4 * 1.1 * textSize, textSize, kFALSE, kFALSE, kFALSE);
+    drawLatexAdd(Form("anti-#it{k}_{T}, #it{R} = 0.6, %s", etaRange[0].Data()), 0.15, 0.93 - 4 * 1.1 * textSize, textSize, kFALSE, kFALSE, kFALSE);
 
     canvas->SaveAs(outputFileName);
     // delete canvas;
@@ -200,7 +200,7 @@ void PlotHistogramsMultiPanel(TH1F *histos[npTBins - 1][nR], const TString &titl
             }
         }
         // Add title with the corresponding energy bin
-        TLatex *titleLatex = new TLatex(0.15, 0.96, Form("#it{p}_{T}^{jet} = %0.0f - %0.0f GeV/#it{c}", JetpTBorders[eb], JetpTBorders[eb + 1]));
+        TLatex *titleLatex = new TLatex(0.15, 0.96, Form("#it{p}_{T}^{jet} = %0.0f--%0.0f GeV/#it{c}", JetpTBorders[eb], JetpTBorders[eb + 1]));
         titleLatex->SetNDC();
         titleLatex->SetTextSize(0.05);
         titleLatex->Draw();
