@@ -52,7 +52,7 @@ void Spectra() {
     Size_t  markerS[5]    = { 2, 2, 2.4, 2, 2};
 
     // Read histograms from the ROOT file
-    TFile* file = TFile::Open("Data20230728/Spectra/DetMerged.root", "READ");
+    TFile* file = TFile::Open("Data20230816/JES/EneMerged_OutputR6_pT_0Mass.root", "READ");
     //TFile* file = TFile::Open("JetJetOutput/July2023/data/20230722_pythia8_JetJet_5-10GeV_Merged_Output.root", "READ");
     //TFile* file = TFile::Open("JetJetOutput/July2023/data/20230722_pythia8_JetJet_10-20GeV_Merged_Output.root", "READ");
     //TFile* file = TFile::Open("JetJetOutput/July2023/data/20230722_pythia8_JetJet_20-30GeV_Merged_Output.root", "READ");
